@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Onboarding Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+            background-color: #13123C; 
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 480px; /* Limits width for larger devices */
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center content horizontally */
+        }
+
+        .container img {
+            width: 162px;
+            height: 162px;
+            flex-shrink: 0;
+        }
+        .btn{
+            background-color: #73BEDD;
+            color:black;
+            border-radius: 10px;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="onboard.png" alt="onboard">
+    </div>
+    
+</body>
+<script>
+    // Redirect to main page after 6 seconds
+    setTimeout(function() {
+        window.location.href = "welcomepage.html";
+    }, 3000);
+</script>
+</html>

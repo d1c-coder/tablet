@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Welcome Page</title>
+    <style>
+        /* Basic reset and styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #0B0E36;
+            color: #FFFFFF;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+        }
+
+        .headline {
+            font-size: 31px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #73BEDD;
+            font-family: Inter;
+            align-content:center;
+
+        }
+
+        .subtext {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            max-width: 300px;
+            color:#A7A7A7 ;
+            font-family: Inter;
+            font-weight: 600;
+        }
+
+        .input-field {
+            width: 396px;
+            padding: 12px;
+            font-size: 16px;
+            text-align: center;
+            border-radius: 15px;
+            border: none;
+            margin-bottom: 20px;
+            background-color: #73BEDD80;
+            color: white;
+        }
+
+        .input-field::placeholder {
+            color: black;
+        }
+
+        .btn {
+            width: 396px;
+            padding: 11px;
+            font-size: 16px;
+            font-weight: bold;
+            color: black;
+            background-color: #73BEDD80;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 450px;
+            height:50px;
+        }
+
+        .btn:hover {
+            background-color: #73BEDD;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="onboard.png" alt="Logo" class="logo">
+        <div class="headline">Welcome to Tablet</div>
+        <div class="subtext">
+            We’re excited to have you here! Let's get started by creating a nickname for your account.
+        </div>
+        <input type="text" class="input-field" placeholder="Enter your nickname">
+        <a href="homepage.html">
+        <button class="btn">Continue</button>
+    </a>
+    </div>
+</body>
+</html>

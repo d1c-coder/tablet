@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Wallet Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0B0E36;
+            color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .wallet-header {
+            margin-top: 20px;
+        }
+
+        .wallet-header img {
+            width: 80px;
+            margin-bottom: 15px;
+        }
+
+        .wallet-title {
+            font-size: 22px;
+            color: #73BEDD;
+        }
+
+        .wallet-description {
+            font-size: 14px;
+            color: #73BEDD;
+            margin-top: 5px;
+        }
+
+        .connect-button, .wallet-address {
+            margin: 20px 9px;
+            padding: 12px 0;
+            background-color: #0B0E36;
+            border: 1px solid #73BEDD;
+            border-radius: 10px;
+            color: #73BEDD;
+            font-size: 16px;
+            font-weight: bold;
+            width: 95%;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 49px;
+            margin-bottom: 318px;
+        }
+
+        .wallet-address {
+            background-color: #1C1F4A;
+            justify-content: space-between;
+        }
+
+        .copy-message {
+            display: none;
+            padding: 10px 20px;
+            background-color: #6274EB;
+            color: #FFFFFF;
+            font-size: 14px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: #1C1F4A;
+            width: 100%;
+            padding: 10px 0;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .bottom-nav-item {
+            color: #73BEDD;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .bottom-nav-item i {
+            font-size: 20px;
+            color: #73BEDD;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Wallet Header -->
+        <div class="wallet-header">
+            <img src="onboard.png" alt="Wallet Icon"> <!-- Replace with actual image source -->
+            <div class="wallet-title">Wallet</div>
+            <div class="wallet-description" id="walletDescription">Connect your wallet for future rewards.</div>
+        </div>
+
+        <!-- Connect Wallet Button -->
+        <button class="connect-button" id="connectButton" onclick="connectWallet()">Connect your wallet ></button>
+
+        <!-- Wallet Address -->
+        <div class="wallet-address" id="walletAddress" style="display: none;">
+            <span>E2xC9...gU3L</span>
+            <button onclick="copyWalletAddress()">&#x2716;</button>
+        </div>
+
+        <!-- Copy Message -->
+        <div class="copy-message" id="copyMessage">Copied to clipboard!</div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="bottom-nav-item" onclick="location.href='homepage.html'">
+            <i class="fa fa-home"></i>
+            <div>Home</div>
+        </div>
+        <div class="bottom-nav-item" onclick="location.href='taskspage.html'">
+            <i class="fa fa-tasks"></i>
+            <div>Tasks</div>
+        </div>
+        <div class="bottom-nav-item" onclick="location.href='invites.html'">
+            <i class="fa fa-user-friends"></i>
+            <div>Invites</div>
+        </div>
+        <div class="bottom-nav-item" onclick="location.href='wallet.html'">
+            <i class="fa fa-wallet"></i>
+            <div>Wallet</div>
+        </div>
+    </div>
+
+    <script>
+        function connectWallet() {
+            document.getElementById("connectButton").style.display = "none";
+            document.getElementById("walletAddress").style.display = "flex";
+            document.getElementById("walletDescription").innerText = "Your wallet is successfully connected.";
+        }
+
+        function copyWalletAddress() {
+            const copyMessage = document.getElementById("copyMessage");
+            copyMessage.style.display = "block";
+            setTimeout(() => {
+                copyMessage.style.display = "none";
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

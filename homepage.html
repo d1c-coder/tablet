@@ -43,9 +43,8 @@
             font-weight: bold;
             text-transform: uppercase;
             font-size: 14px;
-           margin-bottom: 200px;
-           margin-left: 150px;
-
+            margin-bottom: 200px;
+            margin-left: 150px;
         }
 
         /* Profile Section */
@@ -77,8 +76,21 @@
 
         .points-label {
             font-size: 16px;
-            color:#73BEDD;
+            color: #73BEDD;
             margin-bottom: 30px;
+        }
+
+        /* Boost Points Button */
+        .boost-btn {
+            padding: 12px 20px;
+            color:#73BEDD ;
+            border: 2px solid #73BEDD;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 25px;
+            background-color: transparent;
         }
 
         /* Progress Bar Section */
@@ -97,7 +109,7 @@
             max-width: 320px;
             height: 16px;
             background-color: #1C1F4A;
-            border-radius: 8px;
+            border-radius: 5px;
             overflow: hidden;
             margin: 0 auto 10px;
         }
@@ -112,6 +124,44 @@
             font-size: 14px;
             color: #73BEDD;
             margin-bottom: 20px;
+        }
+
+        /* Popup Style */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 400px;
+            padding: 20px;
+            background-color: #1C1F4A;
+            color: #FFFFFF;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+        }
+
+        .popup h3 {
+            margin-bottom: 10px;
+            color: #73BEDD;
+        }
+
+        .popup p {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            padding: 10px 20px;
+            background-color: #6274EB;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
         }
 
         /* Bottom Navigation */
@@ -152,7 +202,7 @@
 
     <div class="container">
         <!-- Tablet Ambassadors Button -->
-        <div class="ambassador-btn">Tablet Ambassadors ></div>
+        <div class="ambassador-btn" onclick="location.href='leaderboard.html'">LeaderBoard</div>
         
         <!-- Profile Section -->
         <div class="profile-pic"></div>
@@ -160,7 +210,10 @@
         
         <!-- Points Section -->
         <div class="points">10,597</div>
-        <div class="points-label">Total points</div>
+        <div class="points-label">TAB points</div>
+
+        <!-- Boost Points Button -->
+        <button class="boost-btn" onclick="showBoostPopup()">Boost Points</button>
 
         <!-- Progress Bar Section -->
         <div class="progress-section">
@@ -173,33 +226,41 @@
         <div class="progress-status">Farming in progress...</div>
     </div>
 
+    <!-- Popup -->
+    <div class="popup" id="boostPopup">
+        <h3>Boost Points</h3>
+        <p>Your mining speed will be doubled! Enjoy faster mining and collect points twice as quickly.</p>
+        <button class="close-btn" onclick="closeBoostPopup()">Close</button>
+    </div>
+
     <!-- Bottom Navigation Bar -->
     <div class="nav-bar">
-        <a href="homepage.html">
-        <div class="nav-item active">
+        <div class="nav-item active" onclick="location.href='homepage.html'">
             <i class="fas fa-home"></i>
             <div>Home</div>
         </div>
-    </a>
-    <a href="taskspage.html">
         <div class="nav-item">
-            <i class="fas fa-tasks"></i>
+            <i class="fas fa-tasks" onclick="location.href='taskspage.html'"></i>
             <div>Tasks</div>
         </div>
-    </a>
- 
-        <div class="nav-item"  onclick="location.href='invites.html'">
+        <div class="nav-item" onclick="location.href='invites.html'">
             <i class="fas fa-user-friends"></i>
             <div>Invites</div>
         </div>
-
-    <a href="wallet.html">
-        <div class="nav-item">
+        <div class="nav-item" onclick="location.href='wallet.html'">
             <i class="fas fa-wallet"></i>
             <div>Wallet</div>
         </div>
-    </a>
     </div>
 
+    <script>
+        function showBoostPopup() {
+            document.getElementById("boostPopup").style.display = "block";
+        }
+
+        function closeBoostPopup() {
+            document.getElementById("boostPopup").style.display = "none";
+        }
+    </script>
 </body>
 </html>

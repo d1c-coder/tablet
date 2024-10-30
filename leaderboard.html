@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Leaderboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Basic reset and styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #0B0E36;
+            color: #FFFFFF;
+            min-height: 100vh;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .leaderboard-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #73BEDD;
+            margin-bottom: 20px;
+        }
+
+        /* Close Button */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            color: #A3A3D9;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: #FFD700; /* Changes color on hover */
+        }
+
+        /* Leaderboard Table */
+        .leaderboard {
+            width: 100%;
+            background-color: #1C1F4A;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .leaderboard-header, .leaderboard-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #3B3F6B;
+            font-size: 16px;
+        }
+
+        .leaderboard-header {
+            font-weight: bold;
+            color: #A3A3D9;
+        }
+
+        .leaderboard-row:last-child {
+            border-bottom: none;
+        }
+
+        .leaderboard-rank {
+            color: #FFD700; /* Gold color for the rank */
+            font-weight: bold;
+        }
+
+        .username {
+            color: #73BEDD;
+        }
+
+        .balance {
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Close Button -->
+        <div class="close-btn" onclick="location.href='homepage.html'">&times;</div>
+        
+        <!-- Leaderboard Title -->
+        <div class="leaderboard-title">Leaderboard</div>
+        
+        <!-- Leaderboard Table -->
+        <div class="leaderboard">
+            <!-- Header Row -->
+            <div class="leaderboard-header">
+                <span>Rank</span>
+                <span>Username</span>
+                <span>Balance</span>
+            </div>
+
+            <!-- User Rows -->
+            <div class="leaderboard-row">
+                <span class="leaderboard-rank">#1</span>
+                <span class="username">Ajayfizzy</span>
+                <span class="balance">12,345</span>
+            </div>
+            <div class="leaderboard-row">
+                <span class="leaderboard-rank">#2</span>
+                <span class="username">StarGazer</span>
+                <span class="balance">10,900</span>
+            </div>
+            <div class="leaderboard-row">
+                <span class="leaderboard-rank">#3</span>
+                <span class="username">CryptoKing</span>
+                <span class="balance">9,800</span>
+            </div>
+            <div class="leaderboard-row">
+                <span class="leaderboard-rank">#4</span>
+                <span class="username">TabMiner</span>
+                <span class="balance">7,500</span>
+            </div>
+            <div class="leaderboard-row">
+                <span class="leaderboard-rank">#5</span>
+                <span class="username">WealthSeeker</span>
+                <span class="balance">6,300</span>
+            </div>
+            <!-- Add more rows as needed -->
+        </div>
+    </div>
+
+</body>
+</html>

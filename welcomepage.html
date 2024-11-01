@@ -100,10 +100,26 @@
         <div class="subtext">
             We’re excited to have you here! Let's get started by creating a nickname for your account.
         </div>
-        <input type="text" class="input-field" placeholder="Enter your nickname">
-        <a href="homepage.html">
-        <button class="btn">Continue</button>
+        <input type="text" id="nicknameInput" class="input-field" placeholder="Enter your nickname">
+        <button class="btn" onclick="saveNickname()">Continue</button>
     </a>
     </div>
+    <script>
+        function saveNickname() {
+            const nickname = document.getElementById('nicknameInput').value;
+            localStorage.setItem('nickname', nickname);
+            window.location.href = 'homepage.html';
+        }
+     
+    // Save the nickname to localStorage when user clicks "Continue"
+    document.querySelector('.btn').addEventListener('click', function() {
+        const nickname = document.querySelector('.input-field').value;
+        if (nickname) {
+            localStorage.setItem('nickname', nickname);
+        }
+    });
+
+
+    </script>
 </body>
 </html>

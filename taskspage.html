@@ -6,8 +6,9 @@
     <title>Tasks Page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Basic reset and styles */
-        * {
+        /* Your existing CSS code */
+          /* Basic reset and styles */
+          * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -135,10 +136,10 @@
     </style>
 </head>
 <body>
-
     <!-- Header -->
     <div class="header">
         Available Tasks (16)
+        <div id="point-balance">Points: 0</div>
     </div>
 
     <!-- Tasks List -->
@@ -152,7 +153,7 @@
                     <div class="task-points">+10</div>
                 </div>
             </div>
-            <button class="start-button">Start</button>
+            <button class="start-button" onclick="addPoints(10)">Start</button>
         </div>
         <div class="task-item">
             <div class="task-info">
@@ -162,196 +163,63 @@
                     <div class="task-points">+10</div>
                 </div>
             </div>
-            <button class="start-button">Start</button>
+            <button class="start-button" onclick="addPoints(10)">Start</button>
         </div>
-        <div class="task-item">
-            <div class="task-info">
-                <img src="xlogo.png" alt="X Logo">
-                <div>
-                    <div class="task-text">Follow us on X</div>
-                    <div class="task-points">+10</div>
-                </div>
-            </div>
-            <button class="start-button">Start</button>
-        </div>   <div class="task-item">
-            <div class="task-info">
-                <img src="xlogo.png" alt="X Logo">
-                <div>
-                    <div class="task-text">Follow us on X</div>
-                    <div class="task-points">+10</div>
-                </div>
-            </div>
-            <button class="start-button">Start</button>
-        </div>   <div class="task-item">
-            <div class="task-info">
-                <img src="xlogo.png" alt="X Logo">
-                <div>
-                    <div class="task-text">Follow us on X</div>
-                    <div class="task-points">+10</div>
-                </div>
-            </div>
-            <button class="start-button">Start</button>
-        </div>   <div class="task-item">
-            <div class="task-info">
-                <img src="xlogo.png" alt="X Logo">
-                <div>
-                    <div class="task-text">Follow us on X</div>
-                    <div class="task-points">+10</div>
-                </div>
-            </div>
-            <button class="start-button">Start</button>
-        </div>   <div class="task-item">
-            <div class="task-info">
-                <img src="xlogo.png" alt="X Logo">
-                <div>
-                    <div class="task-text">Follow us on X</div>
-                    <div class="task-points">+10</div>
-                </div>
-            </div>
-            <button class="start-button">Start</button>
-        </div>   <div class="task-item">
-            <div class="task-info">
-                <img src="xlogo.png" alt="X Logo">
-                <div>
-                    <div class="task-text">Follow us on X</div>
-                    <div class="task-points">+10</div>
-                </div>
-            </div>
-            <button class="start-button">Start</button>
-        </div>   <div class="task-item">
-            <div class="task-info">
-                <img src="xlogo.png" alt="X Logo">
-                <div>
-                    <div class="task-text">Follow us on X</div>
-                    <div class="task-points">+10</div>
-                </div>
-            </div>
-            <button class="start-button">Start</button>
-        </div>   <div class="task-item">
-            <div class="task-info">
-                <img src="xlogo.png" alt="X Logo">
-                <div>
-                    <div class="task-text">Follow us on X</div>
-                    <div class="task-points">+10</div>
-                </div>
-            </div>
-            <button class="start-button">Start</button>
-        </div>   <div class="task-item">
-            <div class="task-info">
-                <img src="xlogo.png" alt="X Logo">
-                <div>
-                    <div class="task-text">Follow us on X</div>
-                    <div class="task-points">+10</div>
-                </div>
-            </div>
-            <button class="start-button">Start</button>
-        </div>   <div class="task-item">
-            <div class="task-info">
-                <img src="xlogo.png" alt="X Logo">
-                <div>
-                    <div class="task-text">Follow us on X</div>
-                    <div class="task-points">+10</div>
-                </div>
-            </div>
-            <button class="start-button">Start</button>
-        </div>   <div class="task-item">
-            <div class="task-info">
-                <img src="xlogo.png" alt="X Logo">
-                <div>
-                    <div class="task-text">Follow us on X</div>
-                    <div class="task-points">+10</div>
-                </div>
-            </div>
-            <button class="start-button">Start</button>
-        </div>   <div class="task-item">
-            <div class="task-info">
-                <img src="xlogo.png" alt="X Logo">
-                <div>
-                    <div class="task-text">Follow us on X</div>
-                    <div class="task-points">+10</div>
-                </div>
-            </div>
-            <button class="start-button">Start</button>
-        </div>   <div class="task-item">
-            <div class="task-info">
-                <img src="xlogo.png" alt="X Logo">
-                <div>
-                    <div class="task-text">Follow us on X</div>
-                    <div class="task-points">+10</div>
-                </div>
-            </div>
-            <button class="start-button">Start</button>
-        </div>   <div class="task-item">
-            <div class="task-info">
-                <img src="xlogo.png" alt="X Logo">
-                <div>
-                    <div class="task-text">Follow us on X</div>
-                    <div class="task-points">+10</div>
-                </div>
-            </div>
-            <button class="start-button">Start</button>
-        </div>   <div class="task-item">
-            <div class="task-info">
-                <img src="xlogo.png" alt="X Logo">
-                <div>
-                    <div class="task-text">Follow us on X</div>
-                    <div class="task-points">+10</div>
-                </div>
-            </div>
-            <button class="start-button">Start</button>
-        </div>   <div class="task-item">
-            <div class="task-info">
-                <img src="xlogo.png" alt="X Logo">
-                <div>
-                    <div class="task-text">Follow us on X</div>
-                    <div class="task-points">+10</div>
-                </div>
-            </div>
-            <button class="start-button">Start</button>
-        </div>   <div class="task-item">
-            <div class="task-info">
-                <img src="xlogo.png" alt="X Logo">
-                <div>
-                    <div class="task-text">Follow us on X</div>
-                    <div class="task-points">+10</div>
-                </div>
-            </div>
-            <button class="start-button">Start</button>
-        </div>   <div class="task-item">
-            <div class="task-info">
-                <img src="xlogo.png" alt="X Logo">
-                <div>
-                    <div class="task-text">Follow us on X</div>
-                    <div class="task-points">+10</div>
-                </div>
-            </div>
-            <button class="start-button">Start</button>
-        </div>
-        <!-- Additional task items here -->
-        
+        <!-- Additional tasks here -->
     </div>
 
     <!-- Bottom Navigation -->
-    <div class="bottom-nav">
-            <div class="bottom-nav-item"  onclick="location.href='homepage.html'">
-                <i class="fa fa-home"></i>
-                <div>Home</div>
-            </div>
-            <div class="bottom-nav-item"  onclick="location.href='taskspage.html'">
-                <i class="fa fa-tasks"></i>
-                <div>Tasks</div>
-            </div>    
-            <div class="bottom-nav-item" onclick="location.href='invites.html'">
-                <i class="fa fa-user-friends"></i>
-                <div>Invites</div>
-            </div>
-            <div class="bottom-nav-item" onclick="location.href='wallet.html'">
-                <i class="fa fa-wallet"></i>
-                <div>Wallet</div>
-            </div>
+   <!-- Bottom Navigation -->
+   <div class="bottom-nav">
+    <div class="bottom-nav-item"  onclick="location.href='homepage.html'">
+        <i class="fa fa-home"></i>
+        <div>Home</div>
     </div>
+    <div class="bottom-nav-item"  onclick="location.href='taskspage.html'">
+        <i class="fa fa-tasks"></i>
+        <div>Tasks</div>
+    </div>    
+    <div class="bottom-nav-item" onclick="location.href='invites.html'">
+        <i class="fa fa-user-friends"></i>
+        <div>Invites</div>
+    </div>
+    <div class="bottom-nav-item" onclick="location.href='wallet.html'">
+        <i class="fa fa-wallet"></i>
+        <div>Wallet</div>
+    </div>
+</div>
 
-    <!-- Link to Font Awesome for Icons (if not already included) -->
+    <!-- Font Awesome Script -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <script>
+        // Function to load points from localStorage and display it
+        function loadPoints() {
+            let points = localStorage.getItem('userPoints');
+            if (points === null) {
+                points = 0;
+            } else {
+                points = parseInt(points);
+            }
+            document.getElementById('point-balance').textContent = `Points: ${points}`;
+        }
+
+        // Function to add points and save to localStorage
+        function addPoints(pointsToAdd) {
+            let currentPoints = localStorage.getItem('userPoints');
+            if (currentPoints === null) {
+                currentPoints = 0;
+            } else {
+                currentPoints = parseInt(currentPoints);
+            }
+            const newPoints = currentPoints + pointsToAdd;
+            localStorage.setItem('userPoints', newPoints);
+            document.getElementById('point-balance').textContent = `Points: ${newPoints}`;
+            alert(`You've earned ${pointsToAdd} points!`);
+        }
+
+        // Load points when the page loads
+        window.onload = loadPoints;
+    </script>
 </body>
 </html>

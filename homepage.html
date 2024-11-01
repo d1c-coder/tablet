@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tablet Home Page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect.min.js"></script>
     <style>
         /* Basic reset and styling */
         * {
@@ -33,7 +34,6 @@
             margin-bottom: 300px;
         }
 
-        /* Tablet Ambassadors Button */
         .ambassador-btn {
             display: inline-block;
             padding: 8px 16px;
@@ -47,13 +47,12 @@
             margin-left: 150px;
         }
 
-        /* Profile Section */
         .profile-pic {
             width: 80px;
             height: 80px;
             border-radius: 50%;
             margin: 0 auto;
-            background-image: url('fizzyman.jpg'); /* Replace with the actual profile image path */
+            background-image: url('fizzyman.jpg');
             background-size: cover;
             background-position: center;
             margin-bottom: 20px;
@@ -66,7 +65,6 @@
             color: #73BEDD;
         }
 
-        /* Points Section */
         .points {
             font-size: 36px;
             font-weight: bold;
@@ -80,7 +78,6 @@
             margin-bottom: 30px;
         }
 
-        /* Boost Points Button */
         .boost-btn {
             padding: 12px 20px;
             color:#73BEDD ;
@@ -93,7 +90,6 @@
             background-color: transparent;
         }
 
-        /* Progress Bar Section */
         .progress-section {
             display: flex;
             align-items: center;
@@ -116,8 +112,8 @@
 
         .progress-bar {
             height: 100%;
-            width: 65%; /* Set width based on progress (e.g., 65% complete) */
             background: linear-gradient(90deg, #4253E5 0%, #A3A3D9 100%);
+            width: 0%; /* Initial width for progress bar */
         }
 
         .progress-status {
@@ -126,7 +122,6 @@
             margin-bottom: 20px;
         }
 
-        /* Popup Style */
         .popup {
             display: none;
             position: fixed;
@@ -164,7 +159,6 @@
             cursor: pointer;
         }
 
-        /* Bottom Navigation */
         .nav-bar {
             display: flex;
             justify-content: space-around;
@@ -191,6 +185,7 @@
         .nav-item i {
             font-size: 24px;
             margin-bottom: 4px;
+            color:#73BEDD;
         }
 
         .nav-item.active {
@@ -199,48 +194,41 @@
     </style>
 </head>
 <body>
-
     <div class="container">
-        <!-- Tablet Ambassadors Button -->
         <div class="ambassador-btn" onclick="location.href='leaderboard.html'">LeaderBoard</div>
         
-        <!-- Profile Section -->
         <div class="profile-pic"></div>
-        <div class="username">Ajayfizzy</div>
+        <div class="username" id="displayNickname">Nickname</div>
         
-        <!-- Points Section -->
-        <div class="points">10,597</div>
-        <div class="points-label">TAB points</div>
+        <div class="points" id="pointsDisplay">0</div>
+        <div class="points-label" id="balanceDisplay">TAB points</div>
 
-        <!-- Boost Points Button -->
         <button class="boost-btn" onclick="showBoostPopup()">Boost Points</button>
+        <button class="boost-btn" onclick="connectWallet()">Connect Wallet</button>
 
-        <!-- Progress Bar Section -->
         <div class="progress-section">
-            <span>Farming $TAB 98.73/150</span>
-            <span>2h 23m</span>
+            <span id="farmingStatus">Farming $TAB 0/150</span>
+            <span id="timeRemaining">3:00</span>
         </div>
         <div class="progress-bar-container">
-            <div class="progress-bar"></div>
+            <div class="progress-bar" id="progressBar"></div>
         </div>
         <div class="progress-status">Farming in progress...</div>
     </div>
 
-    <!-- Popup -->
     <div class="popup" id="boostPopup">
         <h3>Boost Points</h3>
-        <p>Your Farming speed will be doubled! Enjoy faster farming and collect points twice as quickly.</p>
+        <p>You would be charged 0.2 TON for this transaction.</p>
         <button class="close-btn" onclick="closeBoostPopup()">Close</button>
     </div>
 
-    <!-- Bottom Navigation Bar -->
     <div class="nav-bar">
         <div class="nav-item active" onclick="location.href='homepage.html'">
             <i class="fas fa-home"></i>
             <div>Home</div>
         </div>
-        <div class="nav-item">
-            <i class="fas fa-tasks" onclick="location.href='taskspage.html'"></i>
+        <div class="nav-item" onclick="location.href='taskspage.html'">
+            <i class="fas fa-tasks"></i>
             <div>Tasks</div>
         </div>
         <div class="nav-item" onclick="location.href='invites.html'">
@@ -254,12 +242,78 @@
     </div>
 
     <script>
+        const tonConnect = new TonConnect();
+        const nicknameDisplay = document.getElementById('displayNickname');
+        let nickname = localStorage.getItem('nickname');
+
+        function promptNickname() {
+            nickname = prompt("Enter your nickname:");
+            if (nickname) {
+                localStorage.setItem('nickname', nickname);
+                nicknameDisplay.textContent = nickname;
+            } else {
+                alert("You need to enter a nickname to use this application.");
+                disableApplication();
+            }
+        }
+
+        function disableApplication() {
+            document.body.innerHTML = "<h1>Please refresh and enter a nickname to continue.</h1>";
+        }
+
+        if (!nickname) {
+            promptNickname();
+        } else {
+            nicknameDisplay.textContent = nickname;
+        }
+
+        let points = parseInt(localStorage.getItem('points')) || 0;
+        let timer = parseInt(localStorage.getItem('timer')) || 180;
+        let farmingProgress = parseFloat(localStorage.getItem('farmingProgress')) || 0;
+
+        function updatePoints() {
+            points += 5;
+            localStorage.setItem('points', points);
+            document.getElementById('pointsDisplay').textContent = points;
+        }
+
+        function updateProgress() {
+            const progressBar = document.getElementById('progressBar');
+            farmingProgress += (100 / 150); // Adjust this as needed for smooth progress
+            if (farmingProgress > 100) farmingProgress = 100;
+            localStorage.setItem('farmingProgress', farmingProgress);
+            progressBar.style.width = `${farmingProgress}%`;
+            document.getElementById('farmingStatus').textContent = `Farming $TAB ${Math.floor(farmingProgress * 1.5)}/150`;
+        }
+
+        function updateTimer() {
+            const timeDisplay = document.getElementById('timeRemaining');
+            timer--;
+            localStorage.setItem('timer', timer);
+
+            if (timer <= 0) {
+                timer = 180;
+                updatePoints();
+                updateProgress();
+            }
+
+            const minutes = Math.floor(timer / 60);
+            const seconds = timer % 60;
+            timeDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+
+        setInterval(updateTimer, 1000);
+
+        function connectWallet() {
+            alert("Wallet connected!");
+        }
+
         function showBoostPopup() {
-            document.getElementById("boostPopup").style.display = "block";
+            document.getElementById('boostPopup').style.display = 'block';
         }
 
         function closeBoostPopup() {
-            document.getElementById("boostPopup").style.display = "none";
+            document.getElementById('boostPopup').style.display = 'none';
         }
     </script>
 </body>

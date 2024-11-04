@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tablet Home Page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect.min.js"></script>
     <style>
         /* Basic reset and styling */
         * {
@@ -17,13 +16,12 @@
         body {
             font-family: Arial, sans-serif;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
             background-color: #0B0E36;
             color: #FFFFFF;
             min-height: 100vh;
-            flex-direction: column;
-            overflow: hidden;
         }
 
         .container {
@@ -31,10 +29,23 @@
             max-width: 480px;
             padding: 20px;
             text-align: center;
-            margin-bottom: 300px;
+            position: relative;
         }
 
-        .ambassador-btn {
+        .header {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0 10px;
+        }
+
+        .username {
+            font-size: 20px;
+            font-weight: bold;
+            color: #73BEDD;
+        }
+
+        .leaderboard-btn {
             display: inline-block;
             padding: 8px 16px;
             border: 1px solid #73BEDD;
@@ -47,127 +58,43 @@
             margin-left: 150px;
         }
 
-        .profile-pic {
-            width: 80px;
-            height: 80px;
+        .tap-circle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 40px auto;
+            width: 240px;
+            height: 240px;
             border-radius: 50%;
-            margin: 0 auto;
-            background-image: url('fizzyman.jpg');
-            background-size: cover;
-            background-position: center;
-            margin-bottom: 20px;
+            border: 4px solid #73BEDD;
+            background: #1C1F4A;
         }
 
-        .username {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #73BEDD;
+        .tap-logo {
+            width: 100px;
+            height: 100px;
+            background-image: url('onboard.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
         }
 
         .points {
             font-size: 36px;
             font-weight: bold;
-            margin-bottom: 10px;
             color: #73BEDD;
-        }
-
-        .points-label {
-            font-size: 16px;
-            color: #73BEDD;
-            margin-bottom: 30px;
-        }
-
-        .boost-btn {
-            padding: 12px 20px;
-            color:#73BEDD ;
-            border: 2px solid #73BEDD;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 25px;
-            background-color: transparent;
-        }
-
-        .progress-section {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 14px;
-            color: #FFFFFF;
-            margin-bottom: 20px;
-        }
-
-        .progress-bar-container {
-            position: relative;
-            width: 100%;
-            max-width: 320px;
-            height: 16px;
-            background-color: #1C1F4A;
-            border-radius: 5px;
-            overflow: hidden;
-            margin: 0 auto 10px;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #4253E5 0%, #A3A3D9 100%);
-            width: 0%; /* Initial width for progress bar */
-        }
-
-        .progress-status {
-            font-size: 14px;
-            color: #73BEDD;
-            margin-bottom: 20px;
-        }
-
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
-            max-width: 400px;
-            padding: 20px;
-            background-color: #1C1F4A;
-            color: #FFFFFF;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-            z-index: 100;
-        }
-
-        .popup h3 {
-            margin-bottom: 10px;
-            color: #73BEDD;
-        }
-
-        .popup p {
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        .close-btn {
-            padding: 10px 20px;
-            background-color: #6274EB;
-            color: #FFFFFF;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            cursor: pointer;
+            margin: 20px 0;
         }
 
         .nav-bar {
             display: flex;
             justify-content: space-around;
-            position: fixed;
-            bottom: 0;
             width: 100%;
             max-width: 480px;
             background-color: #1C1F4A;
             padding: 10px 0;
+            position: fixed;
+            bottom: 0;
             box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
         }
 
@@ -175,55 +102,33 @@
             text-align: center;
             color: #73BEDD;
             font-size: 12px;
+            cursor: pointer;
             transition: color 0.3s;
-        }
-
-        .nav-item:hover {
-            color: #A3A3D9;
         }
 
         .nav-item i {
             font-size: 24px;
+            color: #73BEDD;
             margin-bottom: 4px;
-            color:#73BEDD;
-        }
-
-        .nav-item.active {
-            color: #A3A3D9;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="ambassador-btn" onclick="location.href='leaderboard.html'">LeaderBoard</div>
-        
-        <div class="profile-pic"></div>
-        <div class="username" id="displayNickname">Nickname</div>
-        
-        <div class="points" id="pointsDisplay">0</div>
-        <div class="points-label" id="balanceDisplay">TAB points</div>
-
-        <button class="boost-btn" onclick="showBoostPopup()">Boost Points</button>
-        <button class="boost-btn" onclick="connectWallet()">Connect Wallet</button>
-
-        <div class="progress-section">
-            <span id="farmingStatus">Farming $TAB 0/150</span>
-            <span id="timeRemaining">3:00</span>
+        <div class="header">
+            <div class="username" id="displayNickname">Nickname</div>
+            <div class="leaderboard-btn" onclick="location.href='leaderboard.html'">LeaderBoard</div>
         </div>
-        <div class="progress-bar-container">
-            <div class="progress-bar" id="progressBar"></div>
+        <div class="points" id="pointsDisplay">0 TAB points</div>
+        <div class="tap-circle" onclick="tapAction()">
+            <div class="tap-logo"></div>
         </div>
-        <div class="progress-status">Farming in progress...</div>
-    </div>
 
-    <div class="popup" id="boostPopup">
-        <h3>Boost Points</h3>
-        <p>You would be charged 0.2 TON for this transaction.</p>
-        <button class="close-btn" onclick="closeBoostPopup()">Close</button>
+       
     </div>
 
     <div class="nav-bar">
-        <div class="nav-item active" onclick="location.href='homepage.html'">
+        <div class="nav-item" onclick="location.href='homepage.html'">
             <i class="fas fa-home"></i>
             <div>Home</div>
         </div>
@@ -242,78 +147,25 @@
     </div>
 
     <script>
-        const tonConnect = new TonConnect();
         const nicknameDisplay = document.getElementById('displayNickname');
         let nickname = localStorage.getItem('nickname');
-
-        function promptNickname() {
+        
+        if (!nickname) {
             nickname = prompt("Enter your nickname:");
             if (nickname) {
                 localStorage.setItem('nickname', nickname);
-                nicknameDisplay.textContent = nickname;
             } else {
-                alert("You need to enter a nickname to use this application.");
-                disableApplication();
+                alert("You need a nickname to continue.");
             }
         }
-
-        function disableApplication() {
-            document.body.innerHTML = "<h1>Please refresh and enter a nickname to continue.</h1>";
-        }
-
-        if (!nickname) {
-            promptNickname();
-        } else {
-            nicknameDisplay.textContent = nickname;
-        }
+        nicknameDisplay.textContent = nickname;
 
         let points = parseInt(localStorage.getItem('points')) || 0;
-        let timer = parseInt(localStorage.getItem('timer')) || 180;
-        let farmingProgress = parseFloat(localStorage.getItem('farmingProgress')) || 0;
 
-        function updatePoints() {
-            points += 5;
+        function tapAction() {
+            points += 1;
             localStorage.setItem('points', points);
             document.getElementById('pointsDisplay').textContent = points;
-        }
-
-        function updateProgress() {
-            const progressBar = document.getElementById('progressBar');
-            farmingProgress += (100 / 150); // Adjust this as needed for smooth progress
-            if (farmingProgress > 100) farmingProgress = 100;
-            localStorage.setItem('farmingProgress', farmingProgress);
-            progressBar.style.width = `${farmingProgress}%`;
-            document.getElementById('farmingStatus').textContent = `Farming $TAB ${Math.floor(farmingProgress * 1.5)}/150`;
-        }
-
-        function updateTimer() {
-            const timeDisplay = document.getElementById('timeRemaining');
-            timer--;
-            localStorage.setItem('timer', timer);
-
-            if (timer <= 0) {
-                timer = 180;
-                updatePoints();
-                updateProgress();
-            }
-
-            const minutes = Math.floor(timer / 60);
-            const seconds = timer % 60;
-            timeDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-        }
-
-        setInterval(updateTimer, 1000);
-
-        function connectWallet() {
-            alert("Wallet connected!");
-        }
-
-        function showBoostPopup() {
-            document.getElementById('boostPopup').style.display = 'block';
-        }
-
-        function closeBoostPopup() {
-            document.getElementById('boostPopup').style.display = 'none';
         }
     </script>
 </body>

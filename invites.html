@@ -160,91 +160,29 @@
     </style>
 </head>
 <body>
-
-    <!-- Main Content -->
     <div class="container">
-        <!-- Invite Header -->
         <div class="invite-header">
-            <img src="onboard.png" alt="Invite Icon"> <!-- Replace with actual image source -->
+            <img src="onboard.png" alt="Invite Icon">
             <div class="invite-title">Invite Friends</div>
-            <div class="invite-description">Earn 5% from direct referrals.</div>
+            <div class="invite-description">Earn 100 points for each referral.</div>
         </div>
 
-        <!-- Invite Button -->
         <button class="invite-button" onclick="showInviteOverlay()">Invite Friends</button>
 
-        <!-- Friends List -->
-        <div class="friends-list">
-            <div class="friend-item">
-                <div class="friend-info">
-                    <img src="user-avatar.png" alt="User Avatar"> <!-- Replace with actual image source -->
-                    <span>Ofjancytv</span>
-                </div>
-                <span>+100</span>
-            </div> <div class="friend-item">
-                <div class="friend-info">
-                    <img src="user-avatar.png" alt="User Avatar"> <!-- Replace with actual image source -->
-                    <span>Ofjancytv</span>
-                </div>
-                <span>+100</span>
-            </div> <div class="friend-item">
-                <div class="friend-info">
-                    <img src="user-avatar.png" alt="User Avatar"> <!-- Replace with actual image source -->
-                    <span>Ofjancytv</span>
-                </div>
-                <span>+100</span>
-            </div> <div class="friend-item">
-                <div class="friend-info">
-                    <img src="user-avatar.png" alt="User Avatar"> <!-- Replace with actual image source -->
-                    <span>Ofjancytv</span>
-                </div>
-                <span>+100</span>
-            </div> <div class="friend-item">
-                <div class="friend-info">
-                    <img src="user-avatar.png" alt="User Avatar"> <!-- Replace with actual image source -->
-                    <span>Ofjancytv</span>
-                </div>
-                <span>+100</span>
-            </div> <div class="friend-item">
-                <div class="friend-info">
-                    <img src="user-avatar.png" alt="User Avatar"> <!-- Replace with actual image source -->
-                    <span>Ofjancytv</span>
-                </div>
-                <span>+100</span>
-            </div> <div class="friend-item">
-                <div class="friend-info">
-                    <img src="user-avatar.png" alt="User Avatar"> <!-- Replace with actual image source -->
-                    <span>Ofjancytv</span>
-                </div>
-                <span>+100</span>
-            </div> <div class="friend-item">
-                <div class="friend-info">
-                    <img src="user-avatar.png" alt="User Avatar"> <!-- Replace with actual image source -->
-                    <span>Ofjancytv</span>
-                </div>
-                <span>+100</span>
-            </div> <div class="friend-item">
-                <div class="friend-info">
-                    <img src="user-avatar.png" alt="User Avatar"> <!-- Replace with actual image source -->
-                    <span>Ofjancytv</span>
-                </div>
-                <span>+100</span>
-            </div>
-            <!-- Repeat friend items as necessary -->
+        <div class="friends-list" id="friendsList">
+            <!-- Referred friends will be listed here -->
         </div>
     </div>
 
-    <!-- Invite Overlay -->
     <div class="invite-overlay" id="inviteOverlay">
         <h3>Invite Friends</h3>
+        <p id="inviteLink"></p>
         <button class="invite-link-button" onclick="copyInviteLink()">Copy Invite Link</button>
-        <button class="invite-link-button">Share Invite Link</button>
+        <button class="invite-link-button" onclick="shareInviteLink()">Share Invite Link</button>
     </div>
 
-    <!-- Copy Message -->
     <div class="copy-message" id="copyMessage">Copied to clipboard!</div>
 
-    <!-- Bottom Navigation -->
     <div class="bottom-nav">
         <a href="homepage.html" class="bottom-nav-item">
             <i class="fa fa-home"></i>
@@ -265,24 +203,76 @@
     </div>
 
     <script>
+        function getDeviceId() {
+            let deviceId = localStorage.getItem('deviceId');
+            if (!deviceId) {
+                deviceId = 'ID' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('deviceId', deviceId);
+            }
+            return deviceId;
+        }
+
         function showInviteOverlay() {
+            const deviceId = getDeviceId();
+            const inviteLink = `https://t.me/tab_farmbot?start=${deviceId}`;
+            document.getElementById("inviteLink").textContent = inviteLink;
             document.getElementById("inviteOverlay").style.display = "block";
         }
 
         function copyInviteLink() {
-            document.getElementById("copyMessage").style.display = "block";
-            setTimeout(() => {
-                document.getElementById("copyMessage").style.display = "none";
-            }, 2000);
+            const inviteLink = document.getElementById("inviteLink").textContent;
+            navigator.clipboard.writeText(inviteLink).then(() => {
+                document.getElementById("copyMessage").style.display = "block";
+                setTimeout(() => document.getElementById("copyMessage").style.display = "none", 2000);
+            });
         }
 
-        // Close popup if clicked outside
-        window.onclick = function(event) {
-            const overlay = document.getElementById("inviteOverlay");
-            if (event.target === overlay) {
-                overlay.style.display = "none";
+        function shareInviteLink() {
+            alert("Share functionality to be implemented.");
+        }
+
+        function checkReferral() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const refId = urlParams.get('start');
+            if (refId && !localStorage.getItem('referrer')) {
+                localStorage.setItem('referrer', refId);
+                addReferralPoints(refId);
             }
-        };
+        }
+
+        function addReferralPoints(refId) {
+            const inviterPoints = localStorage.getItem(`points_${refId}`) || 0;
+            const updatedPoints = parseInt(inviterPoints) + 100;
+            localStorage.setItem(`points_${refId}`, updatedPoints);
+
+            let referredFriends = JSON.parse(localStorage.getItem(`referred_${refId}`) || "[]");
+            referredFriends.push({ name: "NewUser", points: 100 });
+            localStorage.setItem(`referred_${refId}`, JSON.stringify(referredFriends));
+        }
+
+        function loadFriends() {
+            const deviceId = getDeviceId();
+            const friends = JSON.parse(localStorage.getItem(`referred_${deviceId}`) || "[]");
+            const friendsList = document.getElementById("friendsList");
+
+            friends.forEach(friend => {
+                const friendItem = document.createElement("div");
+                friendItem.className = "friend-item";
+                friendItem.innerHTML = `
+                    <div class="friend-info">
+                        <img src="user-avatar.png" alt="User Avatar">
+                        <span>${friend.name}</span>
+                    </div>
+                    <span>+${friend.points}</span>
+                `;
+                friendsList.appendChild(friendItem);
+            });
+        }
+
+        window.onload = function() {
+            checkReferral();
+            loadFriends();
+        }
     </script>
 </body>
 </html>

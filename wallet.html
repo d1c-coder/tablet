@@ -6,105 +6,19 @@
     <title>Wallet Page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #0B0E36;
-            color: #FFFFFF;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 480px;
-            padding: 20px;
-            text-align: center;
-            position: relative;
-        }
-
-        .wallet-header {
-            margin-top: 20px;
-        }
-
-        .wallet-header img {
-            width: 80px;
-            margin-bottom: 15px;
-        }
-
-        .wallet-title {
-            font-size: 22px;
-            color: #73BEDD;
-        }
-
-        .wallet-description {
-            font-size: 14px;
-            color: #73BEDD;
-            margin-top: 5px;
-        }
-
-        .connect-button, .wallet-address {
-            margin: 20px 9px;
-            padding: 12px 0;
-            background-color: #0B0E36;
-            border: 1px solid #73BEDD;
-            border-radius: 10px;
-            color: #73BEDD;
-            font-size: 16px;
-            font-weight: bold;
-            width: 95%;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 49px;
-            margin-bottom: 318px;
-        }
-
-        .wallet-address {
-            background-color: #1C1F4A;
-            justify-content: space-between;
-        }
-
-        .copy-message {
-            display: none;
-            padding: 10px 20px;
-            background-color: #6274EB;
-            color: #FFFFFF;
-            font-size: 14px;
-            border-radius: 8px;
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .bottom-nav {
-            display: flex;
-            justify-content: space-around;
-            background-color: #1C1F4A;
-            width: 100%;
-            padding: 10px 0;
-            position: absolute;
-            bottom: 0;
-        }
-
-        .bottom-nav-item {
-            color: #73BEDD;
-            text-align: center;
-            font-size: 12px;
-        }
-
-        .bottom-nav-item i {
-            font-size: 20px;
-            color: #73BEDD;
-        }
+        /* Styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background-color: #0B0E36; color: #FFFFFF; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 480px; padding: 20px; text-align: center; position: relative; }
+        .wallet-header img { width: 80px; margin-bottom: 15px; }
+        .wallet-title { font-size: 22px; color: #73BEDD; }
+        .wallet-description { font-size: 14px; color: #73BEDD; margin-top: 5px; }
+        .input-section { display: flex; flex-direction: column; align-items: center; }
+        .input-section input { margin: 20px 0; padding: 10px; border-radius: 10px; border: 1px solid #73BEDD; color: #0B0E36; }
+        .connect-button, .locked-wallet { padding: 12px 0; background-color: #0B0E36; border: 1px solid #73BEDD; border-radius: 10px; color: #73BEDD; font-size: 16px; font-weight: bold; cursor: pointer; width: 95%; transition: background-color 0.2s ease; }
+        .locked-wallet { background-color: #1C1F4A; display: flex; align-items: center; justify-content: center; }
+        .bottom-nav { display: flex; justify-content: space-around; background-color: #1C1F4A; width: 100%; padding: 10px 0; position: absolute; bottom: 0; }
+        .bottom-nav-item i { font-size: 20px; color: #73BEDD; }
     </style>
 </head>
 <body>
@@ -115,20 +29,19 @@
         <div class="wallet-header">
             <img src="onboard.png" alt="Wallet Icon"> <!-- Replace with actual image source -->
             <div class="wallet-title">Wallet</div>
-            <div class="wallet-description" id="walletDescription">Connect your wallet for future rewards.</div>
+            <div class="wallet-description" id="walletDescription">Connect your Solana wallet by entering it manually.</div>
         </div>
 
-        <!-- Connect Wallet Button -->
-        <button class="connect-button" id="connectButton" onclick="connectWallet()">Connect your wallet ></button>
-
-        <!-- Wallet Address -->
-        <div class="wallet-address" id="walletAddress" style="display: none;">
-            <span>E2xC9...gU3L</span>
-            <button onclick="copyWalletAddress()">&#x2716;</button>
+        <!-- Wallet Input Section -->
+        <div class="input-section">
+            <input type="text" id="walletInput" placeholder="Enter your Solana wallet address">
+            <button class="connect-button" id="saveButton" onclick="saveWalletAddress()">Save Wallet Address ></button>
         </div>
 
-        <!-- Copy Message -->
-        <div class="copy-message" id="copyMessage">Copied to clipboard!</div>
+        <!-- Display Locked Wallet Address -->
+        <div class="locked-wallet" id="lockedWallet" style="display: none;">
+            <span id="savedAddress"></span>
+        </div>
     </div>
 
     <!-- Bottom Navigation -->
@@ -152,19 +65,35 @@
     </div>
 
     <script>
-        function connectWallet() {
-            document.getElementById("connectButton").style.display = "none";
-            document.getElementById("walletAddress").style.display = "flex";
-            document.getElementById("walletDescription").innerText = "Your wallet is successfully connected.";
-        }
+        // Check for saved wallet address on load
+        window.onload = function() {
+            const savedAddress = localStorage.getItem("walletAddress");
+            if (savedAddress) {
+                document.getElementById("walletInput").style.display = "none";
+                document.getElementById("saveButton").style.display = "none";
+                document.getElementById("lockedWallet").style.display = "flex";
+                document.getElementById("savedAddress").textContent = savedAddress;
+                document.getElementById("walletDescription").innerText = "Your wallet address is saved.";
+            }
+        };
 
-        function copyWalletAddress() {
-            const copyMessage = document.getElementById("copyMessage");
-            copyMessage.style.display = "block";
-            setTimeout(() => {
-                copyMessage.style.display = "none";
-            }, 2000);
+        function saveWalletAddress() {
+            const walletAddress = document.getElementById("walletInput").value;
+            if (walletAddress) {
+                localStorage.setItem("walletAddress", walletAddress);
+                document.getElementById("walletInput").style.display = "none";
+                document.getElementById("saveButton").style.display = "none";
+                document.getElementById("lockedWallet").style.display = "flex";
+                document.getElementById("savedAddress").textContent = walletAddress;
+                document.getElementById("walletDescription").innerText = "Wallet address saved successfully.";
+                
+                // Send email
+                window.location.href = `mailto:ayelaboladaniel947@gmail.com?subject=Wallet Address&body=User Wallet Address: ${walletAddress}`;
+            } else {
+                alert("Please enter a valid wallet address.");
+            }
         }
     </script>
+
 </body>
 </html>

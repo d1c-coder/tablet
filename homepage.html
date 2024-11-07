@@ -123,8 +123,6 @@
         <div class="tap-circle" onclick="tapAction()">
             <div class="tap-logo"></div>
         </div>
-
-       
     </div>
 
     <div class="nav-bar">
@@ -148,25 +146,47 @@
 
     <script>
         const nicknameDisplay = document.getElementById('displayNickname');
-        let nickname = localStorage.getItem('nickname');
-        
-        if (!nickname) {
-            nickname = prompt("Enter your nickname:");
-            if (nickname) {
-                localStorage.setItem('nickname', nickname);
+    
+        // Check if running in Telegram Web App
+        if (window.Telegram && window.Telegram.WebApp.initDataUnsafe) {
+            // Retrieve the Telegram username
+            const telegramUsername = window.Telegram.WebApp.initDataUnsafe.user.username;
+            if (telegramUsername) {
+                nicknameDisplay.textContent = telegramUsername;
             } else {
-                alert("You need a nickname to continue.");
+                alert("Please set a username in Telegram to continue.");
             }
+        } else {
+            alert("This app needs to be opened in Telegram.");
         }
-        nicknameDisplay.textContent = nickname;
-
+    
         let points = parseInt(localStorage.getItem('points')) || 0;
-
+        const pointsDisplay = document.getElementById('pointsDisplay');
+        const maxPoints = 20;
+    
+        pointsDisplay.textContent = `${points} TAB points`;
+    
         function tapAction() {
+            if (points >= maxPoints) {
+                alert("You have reached the maximum of 20 points. Come back in 24 hours.");
+                return;
+            }
             points += 1;
             localStorage.setItem('points', points);
-            document.getElementById('pointsDisplay').textContent = points;
+            pointsDisplay.textContent = `${points} TAB points`;
+    
+            if (points === maxPoints) {
+                alert("Congratulations! You've reached 20 points. Come back in 24 hours.");
+                const nextTapTime = Date.now() + 24 * 60 * 60 * 1000;
+                localStorage.setItem('nextTapTime', nextTapTime);
+            }
+        }
+    
+        const nextTapTime = localStorage.getItem('nextTapTime');
+        if (nextTapTime && Date.now() < nextTapTime) {
+            pointsDisplay.textContent = `You've reached 20 points. Return in 24 hours.`;
         }
     </script>
+    
 </body>
 </html>

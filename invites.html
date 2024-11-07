@@ -164,7 +164,7 @@
         <div class="invite-header">
             <img src="onboard.png" alt="Invite Icon">
             <div class="invite-title">Invite Friends</div>
-            <div class="invite-description">Earn 100 points for each referral.</div>
+            <div class="invite-description">Earn 15 points for each referral.</div>
         </div>
 
         <button class="invite-button" onclick="showInviteOverlay()">Invite Friends</button>
@@ -242,11 +242,11 @@
 
         function addReferralPoints(refId) {
             const inviterPoints = localStorage.getItem(`points_${refId}`) || 0;
-            const updatedPoints = parseInt(inviterPoints) + 100;
+            const updatedPoints = parseInt(inviterPoints) + 15;
             localStorage.setItem(`points_${refId}`, updatedPoints);
 
             let referredFriends = JSON.parse(localStorage.getItem(`referred_${refId}`) || "[]");
-            referredFriends.push({ name: "NewUser", points: 100 });
+            referredFriends.push({ name: "NewUser", points: 15 });
             localStorage.setItem(`referred_${refId}`, JSON.stringify(referredFriends));
         }
 

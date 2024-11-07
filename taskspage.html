@@ -160,6 +160,18 @@
             </div>
             <button class="start-button" onclick="completeTask('Watch1Task', 10, 'https://youtu.be/CE6C8t_WeiY?si=SqzOdNuwX7aOgA0B')">Start</button>
         </div>
+        <!-- Daily Check-in Task -->
+<div class="task-item" id="dailyCheckinTask">
+    <div class="task-info">
+        <img src="checkinlogo.png" alt="Daily Check-in">
+        <div>
+            <div class="task-text">Daily Check-in</div>
+            <div class="task-points">+10</div>
+        </div>
+    </div>
+    <button class="start-button" onclick="dailyCheckIn()" id="dailyCheckinButton">Check-in</button>
+</div>
+
     </div>
 
     <!-- Bottom Navigation -->
@@ -214,6 +226,46 @@
         }
 
         window.onload = loadPoints;
+        function dailyCheckIn() {
+    const lastCheckinTime = localStorage.getItem('lastCheckinTime');
+    const now = Date.now();
+
+    // Check if 24 hours have passed
+    if (lastCheckinTime && now - lastCheckinTime < 24 * 60 * 60 * 1000) {
+        alert("You have already checked in today. Come back in 24 hours!");
+        return;
+    }
+
+    // Award points and save check-in time
+    let currentPoints = parseInt(localStorage.getItem('userPoints')) || 0;
+    localStorage.setItem('userPoints', currentPoints + 10);
+    localStorage.setItem('lastCheckinTime', now);
+    document.getElementById('point-balance').textContent = `Points: ${currentPoints + 10}`;
+    alert("You've earned 10 points for checking in!");
+
+    // Disable the check-in button
+    const checkinButton = document.getElementById('dailyCheckinButton');
+    checkinButton.classList.add('disabled');
+    checkinButton.textContent = "Checked In";
+    checkinButton.disabled = true;
+}
+
+function loadPoints() {
+    let points = localStorage.getItem('userPoints') || 0;
+    document.getElementById('point-balance').textContent = `Points: ${points}`;
+
+    // Re-enable daily check-in if 24 hours have passed
+    const lastCheckinTime = localStorage.getItem('lastCheckinTime');
+    if (lastCheckinTime && Date.now() - lastCheckinTime >= 24 * 60 * 60 * 1000) {
+        const checkinButton = document.getElementById('dailyCheckinButton');
+        checkinButton.classList.remove('disabled');
+        checkinButton.textContent = "Check-in";
+        checkinButton.disabled = false;
+    }
+}
+
+window.onload = loadPoints;
+
     </script>
 </body>
 </html>

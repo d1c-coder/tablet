@@ -30,6 +30,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
+            margin-bottom: 480px;
         }
 
         .logo {
@@ -59,7 +60,7 @@
         }
 
         .input-field {
-            width: 396px;
+            width: 370px;
             padding: 12px;
             font-size: 16px;
             text-align: center;
@@ -75,17 +76,16 @@
         }
 
         .btn {
-            width: 396px;
-            padding: 11px;
-            font-size: 16px;
-            font-weight: bold;
+            display: inline-block;
+            padding: 8px 16px;
+            border: 2px solid #73BEDD;
+            border-radius: 13px;
             color: black;
+            font-weight: bold;
+            text-transform: uppercase;
             background-color: #73BEDD80;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-top: 370px;
-            height:50px;
+            font-size: 13px;
+            margin-left: 205px;
         }
 
         .btn:hover {
@@ -95,13 +95,14 @@
 </head>
 <body>
     <div class="container">
+        <button class="btn" onclick="saveNickname()">Continue</button>
         <img src="onboard.png" alt="Logo" class="logo">
         <div class="headline">Welcome to Tablet</div>
         <div class="subtext">
             We’re excited to have you here! Let's get started by creating a nickname for your account.
         </div>
         <input type="text" id="nicknameInput" class="input-field" placeholder="Enter your nickname">
-        <button class="btn" onclick="saveNickname()">Continue</button>
+        
     </a>
     </div>
     <script>

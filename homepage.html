@@ -145,11 +145,9 @@
     </div>
 
     <script>
-        const nicknameDisplay = document.getElementById('displayNickname');
-    
-        // Check if running in Telegram Web App
-        if (window.Telegram && window.Telegram.WebApp.initDataUnsafe) {
-            // Retrieve the Telegram username
+     const nicknameDisplay = document.getElementById('displayNickname');
+        
+        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe) {
             const telegramUsername = window.Telegram.WebApp.initDataUnsafe.user.username;
             if (telegramUsername) {
                 nicknameDisplay.textContent = telegramUsername;
@@ -157,34 +155,38 @@
                 alert("Please set a username in Telegram to continue.");
             }
         } else {
-            alert("This app needs to be opened in Telegram.");
+            alert("Please open this app within Telegram.");
         }
-    
-        let points = parseInt(localStorage.getItem('points')) || 0;
+
+        let points = parseFloat(localStorage.getItem('points')) || 0;
         const pointsDisplay = document.getElementById('pointsDisplay');
-        const maxPoints = 20;
-    
-        pointsDisplay.textContent = `${points} TAB points`;
-    
+        const maxPoints = 20.0;
+
+        // Show current points
+        pointsDisplay.textContent = `${points.toFixed(1)} TAB points`;
+
         function tapAction() {
-            if (points >= maxPoints) {
-                alert("You have reached the maximum of 20 points. Come back in 24 hours.");
+            const nextTapTime = parseInt(localStorage.getItem('nextTapTime'), 10) || 0;
+            
+            // Check if within 24-hour cooldown
+            if (Date.now() < nextTapTime) {
+                pointsDisplay.textContent = "You've reached 20 points. Return in 24 hours.";
                 return;
             }
-            points += 1;
-            localStorage.setItem('points', points);
-            pointsDisplay.textContent = `${points} TAB points`;
-    
-            if (points === maxPoints) {
-                alert("Congratulations! You've reached 20 points. Come back in 24 hours.");
-                const nextTapTime = Date.now() + 24 * 60 * 60 * 1000;
-                localStorage.setItem('nextTapTime', nextTapTime);
+            
+            // Increment points by 0.1 if below max
+            if (points < maxPoints) {
+                points += 0.1;
+                localStorage.setItem('points', points);
+                pointsDisplay.textContent = `${points.toFixed(1)} TAB points`;
             }
-        }
-    
-        const nextTapTime = localStorage.getItem('nextTapTime');
-        if (nextTapTime && Date.now() < nextTapTime) {
-            pointsDisplay.textContent = `You've reached 20 points. Return in 24 hours.`;
+            
+            // If max points reached, set cooldown period
+            if (points >= maxPoints) {
+                pointsDisplay.textContent = "You've reached 20 points. Return in 24 hours.";
+                const cooldownTime = Date.now() + 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+                localStorage.setItem('nextTapTime', cooldownTime);
+            }
         }
     </script>
     

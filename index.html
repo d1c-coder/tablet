@@ -50,9 +50,20 @@
     
 </body>
 <script>
-    // Redirect to main page after 3 seconds
+    // Check if nickname is saved in localStorage
+const savedNickname = localStorage.getItem('nickname');
+
+if (savedNickname) {
+    // If nickname is set, proceed to the home page
     setTimeout(function() {
         window.location.href = "homepage.html";
     }, 3000);
+} else {
+    // If nickname is not set, redirect to the input page
+    setTimeout(function() {
+        window.location.href = "welcomepage.html";
+    }, 3000);
+}
+
 </script>
 </html>

@@ -91,6 +91,7 @@
         .btn:hover {
             background-color: #73BEDD;
         }
+
     </style>
 </head>
 <body>
@@ -106,19 +107,20 @@
     </a>
     </div>
     <script>
-        function saveNickname() {
-            const nickname = document.getElementById('nicknameInput').value;
-            localStorage.setItem('nickname', nickname);
+       function saveNickname() {
+            const nickname = document.getElementById('nicknameInput').value.trim();
+            if (nickname) {
+                localStorage.setItem('nickname', nickname);
+                window.location.href = 'homepage.html';
+            } else {
+                alert("Please enter a nickname.");
+            }
+        }
+
+        // Redirect to homepage if nickname is already set
+        if (localStorage.getItem('nickname')) {
             window.location.href = 'homepage.html';
         }
-     
-    // Save the nickname to localStorage when user clicks "Continue"
-    document.querySelector('.btn').addEventListener('click', function() {
-        const nickname = document.querySelector('.input-field').value;
-        if (nickname) {
-            localStorage.setItem('nickname', nickname);
-        }
-    });
 
 
     </script>

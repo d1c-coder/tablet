@@ -119,12 +119,13 @@
             <div class="username" id="displayNickname">Nickname</div>
             <div class="leaderboard-btn" onclick="location.href='leaderboard.html'">LeaderBoard</div>
         </div>
-        <div class="points" id="pointsDisplay">0 TAB points</div>
         <div class="tap-circle" onclick="tapAction()">
             <div class="tap-logo"></div>
+          
         </div>
+        <div class="points" id="pointsDisplay">0 TAB points</div>
     </div>
-
+   
     <div class="nav-bar">
         <div class="nav-item" onclick="location.href='homepage.html'">
             <i class="fas fa-home"></i>
@@ -145,49 +146,53 @@
     </div>
 
     <script>
-     const nicknameDisplay = document.getElementById('displayNickname');
-        
-        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe) {
-            const telegramUsername = window.Telegram.WebApp.initDataUnsafe.user.username;
-            if (telegramUsername) {
-                nicknameDisplay.textContent = telegramUsername;
-            } else {
-                alert("Please set a username in Telegram to continue.");
-            }
-        } else {
-            alert("Please open this app within Telegram.");
-        }
+      const nicknameDisplay = document.getElementById('displayNickname');
 
-        let points = parseFloat(localStorage.getItem('points')) || 0;
-        const pointsDisplay = document.getElementById('pointsDisplay');
-        const maxPoints = 20.0;
+      // Get nickname from localStorage and display it
+      const savedNickname = localStorage.getItem('nickname');
+      if (savedNickname) {
+          nicknameDisplay.textContent = savedNickname;
+      } else {
+          // Redirect to the username input page if nickname isn't set
+          window.location.href = 'welcomepage.html';
+      }
 
-        // Show current points
-        pointsDisplay.textContent = `${points.toFixed(1)} TAB points`;
+      let points = parseFloat(localStorage.getItem('points')) || 0;
+      const pointsDisplay = document.getElementById('pointsDisplay');
+      const maxPoints = 20.0;
 
-        function tapAction() {
-            const nextTapTime = parseInt(localStorage.getItem('nextTapTime'), 10) || 0;
-            
-            // Check if within 24-hour cooldown
-            if (Date.now() < nextTapTime) {
-                pointsDisplay.textContent = "You've reached 20 points. Return in 24 hours.";
-                return;
-            }
-            
-            // Increment points by 0.1 if below max
-            if (points < maxPoints) {
-                points += 0.1;
-                localStorage.setItem('points', points);
-                pointsDisplay.textContent = `${points.toFixed(1)} TAB points`;
-            }
-            
-            // If max points reached, set cooldown period
-            if (points >= maxPoints) {
-                pointsDisplay.textContent = "You've reached 20 points. Return in 24 hours.";
-                const cooldownTime = Date.now() + 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-                localStorage.setItem('nextTapTime', cooldownTime);
-            }
-        }
+      // Show current points
+      pointsDisplay.textContent = `${points.toFixed(1)} TAB points`;
+
+      function tapAction() {
+          const now = Date.now();
+          const nextTapTime = parseInt(localStorage.getItem('nextTapTime'), 10) || 0;
+          
+          // If cooldown is active and not reached max points, reset it
+          if (points < maxPoints && now >= nextTapTime) {
+              localStorage.removeItem('nextTapTime'); // Reset cooldown
+          }
+          
+          // Check if within 24-hour cooldown only if max points have been reached
+          if (now < nextTapTime && points >= maxPoints) {
+              pointsDisplay.textContent = "You've reached 20 points. Return in 24 hours.";
+              return;
+          }
+
+          // Increment points by 0.1 if below max
+          if (points < maxPoints) {
+              points += 0.1;
+              localStorage.setItem('points', points);
+              pointsDisplay.textContent = `${points.toFixed(1)} TAB points`;
+          }
+
+          // If max points reached, set cooldown period for 24 hours
+          if (points >= maxPoints) {
+              pointsDisplay.textContent = "You've reached 20 points. Return in 24 hours.";
+              const cooldownTime = now + 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+              localStorage.setItem('nextTapTime', cooldownTime);
+          }
+      }
     </script>
     
 </body>

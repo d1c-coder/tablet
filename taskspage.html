@@ -115,7 +115,7 @@
 <body>
     <!-- Header -->
     <div class="header">
-        Available Tasks (4)
+        Available Tasks (5)
         <div id="point-balance">Points: 0</div>
     </div>
 
@@ -213,58 +213,52 @@
         }
     
         function completeTask(taskId, points, url) {
-            // Check if the task was already completed
-            if (localStorage.getItem(taskId)) {
-                alert("You have already completed this task.");
-                return;
-            }
-    
-            // Redirect user to the task URL in a new tab
-            window.open(url, '_blank');
-    
-            // Notify user and delay point addition for 5 minutes
-            alert("Spend at least 5 minutes on the task before earning points.");
-            
-            setTimeout(() => {
-                // Award points and mark task as completed
-                let currentPoints = parseInt(localStorage.getItem('userPoints')) || 0;
-                localStorage.setItem('userPoints', currentPoints + points);
-                localStorage.setItem(taskId, 'completed');
-                document.getElementById('point-balance').textContent = `Points: ${currentPoints + points}`;
-                alert(`You've earned ${points} points!`);
-    
-                // Disable the task button
-                const button = document.querySelector(`button[onclick="completeTask('${taskId}', ${points}, '${url}')"]`);
-                button.classList.add('disabled');
-                button.textContent = "Completed";
-                button.disabled = true;
-            }, 5 * 60 * 1000); // 5 minutes delay
-        }
-    
-        function dailyCheckIn() {
-            const lastCheckinTime = localStorage.getItem('lastCheckinTime');
-            const now = Date.now();
-    
-            // Check if 24 hours have passed since the last check-in
-            if (lastCheckinTime && now - lastCheckinTime < 24 * 60 * 60 * 1000) {
-                alert("You have already checked in today. Come back in 24 hours!");
-                return;
-            }
-    
-            // Award points and save check-in time
-            let currentPoints = parseInt(localStorage.getItem('userPoints')) || 0;
-            localStorage.setItem('userPoints', currentPoints + 10);
-            localStorage.setItem('lastCheckinTime', now);
-            document.getElementById('point-balance').textContent = `Points: ${currentPoints + 10}`;
-            alert("You've earned 10 points for checking in!");
-    
-            // Disable the check-in button
-            const checkinButton = document.getElementById('dailyCheckinButton');
-            checkinButton.classList.add('disabled');
-            checkinButton.textContent = "Checked In";
-            checkinButton.disabled = true;
-        }
-    
+    if (localStorage.getItem(taskId)) {
+        alert("You have already completed this task.");
+        return;
+    }
+
+    window.open(url, '_blank');
+    alert("Spend at least 5 minutes on the task before earning points.");
+
+    setTimeout(() => {
+        let currentPoints = parseInt(localStorage.getItem('userPoints')) || 0;
+        let newPoints = currentPoints + points;
+        localStorage.setItem('userPoints', newPoints); // Save updated points
+
+        document.getElementById('point-balance').textContent = `Points: ${newPoints}`;
+        alert(`You've earned ${points} points!`);
+
+        const button = document.querySelector(`button[onclick="completeTask('${taskId}', ${points}, '${url}')"]`);
+        button.classList.add('disabled');
+        button.textContent = "Completed";
+        button.disabled = true;
+    }, 5 * 60 * 1000);
+}
+
+function dailyCheckIn() {
+    const now = Date.now();
+    const lastCheckinTime = localStorage.getItem('lastCheckinTime');
+
+    if (lastCheckinTime && now - lastCheckinTime < 24 * 60 * 60 * 1000) {
+        alert("You have already checked in today. Come back in 24 hours!");
+        return;
+    }
+
+    let currentPoints = parseInt(localStorage.getItem('userPoints')) || 0;
+    let newPoints = currentPoints + 10;
+    localStorage.setItem('userPoints', newPoints); // Save updated points
+
+    document.getElementById('point-balance').textContent = `Points: ${newPoints}`;
+    alert("You've earned 10 points for checking in!");
+
+    localStorage.setItem('lastCheckinTime', now);
+    const checkinButton = document.getElementById('dailyCheckinButton');
+    checkinButton.classList.add('disabled');
+    checkinButton.textContent = "Checked In";
+    checkinButton.disabled = true;
+}
+
         window.onload = loadPoints;
     </script>
 </body>

@@ -5,13 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Wallet Page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-<script>
-    (function(){
-        emailjs.init("wg5RAaZYq9DKb2_px"); // Replace with your actual EmailJS user ID
-    })();
-</script>
-
     <style>
         /* Styles */
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -20,10 +13,8 @@
         .wallet-header img { width: 80px; margin-bottom: 15px; }
         .wallet-title { font-size: 22px; color: #73BEDD; }
         .wallet-description { font-size: 14px; color: #73BEDD; margin-top: 5px; }
-        .input-section { display: flex; flex-direction: column; align-items: center; }
-        .input-section input { margin: 20px 0; padding: 10px; border-radius: 10px; border: 1px solid #73BEDD; color: #0B0E36; }
-        .connect-button, .locked-wallet { padding: 12px 0; background-color: #0B0E36; border: 1px solid #73BEDD; border-radius: 10px; color: #73BEDD; font-size: 16px; font-weight: bold; cursor: pointer; width: 95%; transition: background-color 0.2s ease; }
-        .locked-wallet { background-color: #1C1F4A; display: flex; align-items: center; justify-content: center; padding: 10px 0; margin-top: 20px; font-size: 14px; }
+        .connect-button { padding: 12px 0; background-color: #0B0E36; border: 1px solid #73BEDD; border-radius: 10px; color: #73BEDD; font-size: 16px; font-weight: bold; cursor: pointer; width: 95%; transition: background-color 0.2s ease; }
+        .locked-wallet { background-color: #1C1F4A; display: flex; align-items: center; justify-content: center; padding: 10px 0; margin-top: 20px; font-size: 14px; color: #73BEDD; }
         .bottom-nav {
             display: flex;
             justify-content: space-around;
@@ -33,43 +24,22 @@
             position: fixed;
             bottom: 0;
         }
-
-        .bottom-nav-item {
-            color: #73BEDD;
-            text-align: center;
-            font-size: 12px;
-        }
-
-        .bottom-nav-item i {
-            font-size: 20px;
-            color: #73BEDD;
-        }
+        .bottom-nav-item { color: #73BEDD; text-align: center; font-size: 12px; }
+        .bottom-nav-item i { font-size: 20px; color: #73BEDD; }
     </style>
 </head>
 <body>
-
-    <!-- Main Content -->
     <div class="container">
-        <!-- Wallet Header -->
         <div class="wallet-header">
             <img src="onboard.png" alt="Wallet Icon"> <!-- Replace with actual image source -->
             <div class="wallet-title">Wallet</div>
-            <div class="wallet-description" id="walletDescription">Connect your Solana wallet by entering it manually.</div>
+            <div class="wallet-description" id="walletDescription">Connect your Solana wallet.</div>
         </div>
-
-        <!-- Wallet Input Section -->
-        <div class="input-section">
-            <input type="text" id="walletInput" placeholder="Enter your Solana wallet address">
-            <button class="connect-button" id="saveButton" onclick="saveWalletAddress()">Save Wallet Address ></button>
-        </div>
-
-        <!-- Display Locked Wallet Address -->
+        <button class="connect-button" id="connectButton" onclick="connectWallet()">Connect Wallet</button>
         <div class="locked-wallet" id="lockedWallet" style="display: none;">
             <span id="savedAddress"></span>
         </div>
     </div>
-
-    <!-- Bottom Navigation -->
     <div class="bottom-nav">
         <div class="bottom-nav-item" onclick="location.href='homepage.html'">
             <i class="fa fa-home"></i>
@@ -88,43 +58,41 @@
             <div>Wallet</div>
         </div>
     </div>
-
+    
     <script>
-        // Check for saved wallet address on load
-    window.onload = function() {
-        const savedAddress = localStorage.getItem("walletAddress");
-        if (savedAddress) {
-            document.getElementById("walletInput").style.display = "none";
-            document.getElementById("saveButton").style.display = "none";
-            document.getElementById("lockedWallet").style.display = "block";
-            document.getElementById("savedAddress").textContent = savedAddress;
-            document.getElementById("walletDescription").innerText = "Your wallet address is saved.";
+        async function connectWallet() {
+            // Check if Phantom is installed
+            if (window.solana && window.solana.isPhantom) {
+                try {
+                    // Connect to Phantom wallet
+                    const response = await window.solana.connect();
+                    const walletAddress = response.publicKey.toString();
+                    
+                    // Save wallet address to local storage
+                    localStorage.setItem("walletAddress", walletAddress);
+                    document.getElementById("connectButton").style.display = "none";
+                    document.getElementById("lockedWallet").style.display = "block";
+                    document.getElementById("savedAddress").textContent = `Connected: ${walletAddress}`;
+                    document.getElementById("walletDescription").innerText = "Wallet connected successfully.";
+                } catch (error) {
+                    console.error("Connection failed:", error);
+                }
+            } else {
+                // Redirect to Google Play Store if Phantom isn't installed
+                window.location.href = "https://play.google.com/store/apps/details?id=phantom.wallet";
+            }
         }
-    };
 
-    function saveWalletAddress() {
-        const walletAddress = document.getElementById("walletInput").value;
-        if (walletAddress) {
-            localStorage.setItem("walletAddress", walletAddress);
-            document.getElementById("walletInput").style.display = "none";
-            document.getElementById("saveButton").style.display = "none";
-            document.getElementById("lockedWallet").style.display = "block";
-            document.getElementById("savedAddress").textContent = walletAddress;
-            document.getElementById("walletDescription").innerText = "Wallet address saved successfully.";
-            
-            // Send email using EmailJS
-            emailjs.send("service_6s7obpc", "template_6thh338", {
-                user_wallet: walletAddress
-            }).then(function(response) {
-                console.log("Email sent successfully!", response.status, response.text);
-            }, function(error) {
-                console.error("Failed to send email:", error);
-            });
-        } else {
-            alert("Please enter a valid wallet address.");
-        }
-    }
+        // Load saved address if already connected
+        window.onload = function() {
+            const savedAddress = localStorage.getItem("walletAddress");
+            if (savedAddress) {
+                document.getElementById("connectButton").style.display = "none";
+                document.getElementById("lockedWallet").style.display = "block";
+                document.getElementById("savedAddress").textContent = `Connected: ${savedAddress}`;
+                document.getElementById("walletDescription").innerText = "Your wallet address is connected.";
+            }
+        };
     </script>
-
 </body>
 </html>

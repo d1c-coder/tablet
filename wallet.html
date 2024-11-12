@@ -31,7 +31,7 @@
 <body>
     <div class="container">
         <div class="wallet-header">
-            <img src="onboard.png" alt="Wallet Icon"> <!-- Replace with actual image source -->
+            <img src="onboard.png" alt="Wallet Icon">
             <div class="wallet-title">Wallet</div>
             <div class="wallet-description" id="walletDescription">Connect your Solana wallet.</div>
         </div>
@@ -60,26 +60,24 @@
     </div>
     
     <script>
-        async function connectWallet() {
+        function connectWallet() {
             // Check if Phantom is installed
             if (window.solana && window.solana.isPhantom) {
                 try {
-                    // Connect to Phantom wallet
-                    const response = await window.solana.connect();
-                    const walletAddress = response.publicKey.toString();
-                    
-                    // Save wallet address to local storage
-                    localStorage.setItem("walletAddress", walletAddress);
-                    document.getElementById("connectButton").style.display = "none";
-                    document.getElementById("lockedWallet").style.display = "block";
-                    document.getElementById("savedAddress").textContent = `Connected: ${walletAddress}`;
-                    document.getElementById("walletDescription").innerText = "Wallet connected successfully.";
+                    window.solana.connect({ onlyIfTrusted: true }).then(response => {
+                        const walletAddress = response.publicKey.toString();
+                        localStorage.setItem("walletAddress", walletAddress);
+                        document.getElementById("connectButton").style.display = "none";
+                        document.getElementById("lockedWallet").style.display = "block";
+                        document.getElementById("savedAddress").textContent = `Connected: ${walletAddress}`;
+                        document.getElementById("walletDescription").innerText = "Wallet connected successfully.";
+                    });
                 } catch (error) {
                     console.error("Connection failed:", error);
                 }
             } else {
-                // Redirect to Google Play Store if Phantom isn't installed
-                window.location.href = "https://play.google.com/store/apps/details?id=phantom.wallet";
+                // Phantom Wallet Deep Link with Telegram callback
+                window.location.href = "phantom://app?request=connect&callback=https://t.me/tab_farmbot?start=wallet_connected";
             }
         }
 

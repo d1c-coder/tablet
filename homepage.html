@@ -159,28 +159,28 @@
         // Initialize points and set the max limit to 20
         let points = parseFloat(localStorage.getItem('points')) || 0;
         const pointsDisplay = document.getElementById('pointsDisplay');
-        const maxPoints = 20.0;
+        const maxPoints = 20;
         const cooldownTime = 1 * 60 * 60 * 1000; // 1 hour in milliseconds
 
         // Display current points
-        pointsDisplay.textContent = `${points.toFixed(1)} TAB points`;
+        pointsDisplay.textContent = `${points} TAB points`;
 
         // Tap action function with cooldown check
         function tapAction() {
             const now = Date.now();
             const nextTapTime = parseInt(localStorage.getItem('nextTapTime'), 10) || 0;
 
-            // Cooldown message if time hasn't expired
+            // Check if user has reached the max points and cooldown period
             if (now < nextTapTime && points >= maxPoints) {
                 alert("You've reached 20 points. Please wait 1 hour to continue.");
                 return;
             }
 
-            // Increase points by 0.1 if below max limit
+            // Increase points by 1 if below max limit
             if (points < maxPoints) {
-                points += 0.1;
-                localStorage.setItem('points', points.toFixed(1)); 
-                pointsDisplay.textContent = `${points.toFixed(1)} TAB points`;
+                points += 1;
+                localStorage.setItem('points', points); 
+                pointsDisplay.textContent = `${points} TAB points`;
             }
 
             // Set cooldown if 20 points have been reached

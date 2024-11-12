@@ -7,6 +7,157 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* Your CSS styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0B0E36;
+            color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .invite-header {
+            margin-top: 20px;
+        }
+
+        .invite-header img {
+            width: 80px;
+            margin-bottom: 15px;
+        }
+
+        .invite-title {
+            font-size: 22px;
+            color: #73BEDD;
+        }
+
+        .invite-description {
+            font-size: 14px;
+            color: #73BEDD;
+            margin-top: 5px;
+        }
+
+        .invite-button {
+            margin: 20px 0;
+            padding: 12px 0;
+            background-color: #73BEDD;
+            border: none;
+            border-radius: 10px;
+            color: #000;
+            font-size: 16px;
+            font-weight: bold;
+            width: 95%;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .invite-button:hover {
+            background-color: #6274EB;
+        }
+
+        .friends-list {
+            width: 100%;
+            max-width: 480px;
+            margin-top: 10px;
+        }
+
+        .friend-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #2D2F6E;
+            color: #73BEDD;
+        }
+
+        .friend-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .friend-info img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        .invite-overlay,
+        .copy-message {
+            display: none;
+            position: fixed;
+            width: 80%;
+            max-width: 400px;
+            padding: 20px;
+            background-color: #1C1F4A;
+            border-radius: 12px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
+        }
+
+        .invite-overlay h3 {
+            font-size: 18px;
+            color: #FFFFFF;
+        }
+
+        .invite-link-button {
+            margin-top: 15px;
+            padding: 12px 0;
+            width: 100%;
+            background-color: #73BEDD;
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .copy-message {
+            padding: 10px 20px;
+            background-color: #6274EB;
+            color: #FFFFFF;
+            font-size: 14px;
+            border-radius: 8px;
+        }
+
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: #1C1F4A;
+            width: 100%;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+        }
+
+        .bottom-nav-item {
+            color: #73BEDD;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .bottom-nav-item i {
+            font-size: 20px;
+            color: #73BEDD;
+        }
     </style>
 </head>
 <body>

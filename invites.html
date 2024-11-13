@@ -177,7 +177,6 @@
 
     <div class="invite-overlay" id="inviteOverlay">
         <h3>Invite Friends</h3>
-        <p id="inviteLink"></p>
         <button class="invite-link-button" onclick="copyInviteLink()">Copy Invite Link</button>
         <button class="invite-link-button" onclick="shareInviteLink()">Share Invite Link</button>
     </div>
@@ -214,14 +213,12 @@
         }
 
         function showInviteOverlay() {
-            const deviceId = getDeviceId();
-            const inviteLink = `https://t.me/tab_farmbot?start=${deviceId}`;
-            document.getElementById("inviteLink").textContent = inviteLink;
             document.getElementById("inviteOverlay").style.display = "block";
         }
 
         function copyInviteLink() {
-            const inviteLink = document.getElementById("inviteLink").textContent;
+            const deviceId = getDeviceId();
+            const inviteLink = `https://t.me/tab_farmbot?start=${deviceId}`;
             navigator.clipboard.writeText(inviteLink).then(() => {
                 document.getElementById("copyMessage").style.display = "block";
                 setTimeout(() => document.getElementById("copyMessage").style.display = "none", 2000);
@@ -229,9 +226,9 @@
         }
 
         function shareInviteLink() {
-            const inviteLink = document.getElementById("inviteLink").textContent;
-            
-            if (navigator.share) { // Check if Web Share API is available
+            const deviceId = getDeviceId();
+            const inviteLink = `https://t.me/tab_farmbot?start=${deviceId}`;
+            if (navigator.share) {
                 navigator.share({
                     title: 'Invite to Tab Farm Bot',
                     text: 'Join me on this app and earn rewards!',

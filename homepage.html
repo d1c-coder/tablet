@@ -63,6 +63,7 @@
             border: 4px solid #73BEDD;
             background: #1C1F4A;
             cursor: pointer;
+            position: relative;
         }
         .tap-logo {
             width: 100px;
@@ -101,6 +102,24 @@
             color: #73BEDD;
             margin-bottom: 4px;
         }
+        .floating-plus {
+            position: absolute;
+            font-size: 20px;
+            font-weight: bold;
+            color: #73BEDD;
+            animation: floatUp 1.2s ease-out forwards;
+            pointer-events: none;
+        }
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+        }
     </style>
 </head>
 <body>
@@ -109,7 +128,7 @@
             <div class="username" id="displayNickname">Nickname</div>
             <div class="leaderboard-btn" onclick="location.href='leaderboard.html'">LeaderBoard</div>
         </div>
-        <div class="tap-circle" onclick="tapAction()">
+        <div class="tap-circle" onclick="tapAction(event)">
             <div class="tap-logo"></div>
         </div>
         <div class="points" id="pointsDisplay">0 TAB points</div>
@@ -161,7 +180,7 @@
         // Display current points
         pointsDisplay.textContent = `${points} TAB points`;
 
-        function tapAction() {
+        function tapAction(event) {
             const now = Date.now();
 
             // Check if user reached 20 taps within the hour
@@ -182,6 +201,21 @@
                     localStorage.setItem('lastTapTime', now);
                 }
                 localStorage.setItem('tapCount', tapCount);
+
+                // Create and show floating +1 effect
+                const floatingPlus = document.createElement('div');
+                floatingPlus.textContent = '+1';
+                floatingPlus.className = 'floating-plus';
+                floatingPlus.style.left = `${event.clientX - event.target.offsetLeft - 10}px`;
+                floatingPlus.style.top = `${event.clientY - event.target.offsetTop - 10}px`;
+
+                const tapCircle = document.querySelector('.tap-circle');
+                tapCircle.appendChild(floatingPlus);
+
+                // Remove the floating +1 after animation
+                setTimeout(() => {
+                    floatingPlus.remove();
+                }, 1200);
             }
         }
     </script>

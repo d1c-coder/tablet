@@ -6,7 +6,8 @@
     <title>Tablet Home Page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Basic reset and styling */
+        /* Existing styles */
+        /* Add Boost Overlay Styles */
         * {
             margin: 0;
             padding: 0;
@@ -120,6 +121,42 @@
                 transform: translateY(-50px);
             }
         }
+        .boost-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none; /* Hidden by default */
+        }
+        .boost-popup {
+            width: 300px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: #333;
+        }
+        .boost-popup button {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .boost-btn {
+            background-color: #73BEDD;
+            color: white;
+        }
+        .close-btn {
+            background-color: #444;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -132,6 +169,7 @@
             <div class="tap-logo"></div>
         </div>
         <div class="points" id="pointsDisplay">0 TAB points</div>
+        <button id="boostButton" onclick="openBoostOverlay()">Boost</button>
     </div>
    
     <div class="nav-bar">
@@ -153,6 +191,16 @@
         </div>
     </div>
 
+    <!-- Boost Overlay -->
+    <div class="boost-overlay" id="boostOverlay">
+        <div class="boost-popup">
+            <p>Boost your points per tap to <span id="nextBoostValue">+2</span>!</p>
+            <p>Cost: <span id="boostCostDisplay">200</span> TAB points</p>
+            <button class="boost-btn" onclick="applyBoost()">Apply Boost</button>
+            <button class="close-btn" onclick="closeBoostOverlay()">Close</button>
+        </div>
+    </div>
+
     <script>
         const nicknameDisplay = document.getElementById('displayNickname');
         const savedNickname = localStorage.getItem('nickname');
@@ -164,21 +212,30 @@
             window.location.href = 'welcomepage.html';
         }
 
-        // Initialize points and set variables for tap counting and cooldown
+        // Initialize points and variables
         let points = parseFloat(localStorage.getItem('points')) || 0;
+        let tapMultiplier = parseFloat(localStorage.getItem('tapMultiplier')) || 1; // Default tap value
+        let boostCost = parseInt(localStorage.getItem('boostCost'), 10) || 200; // Initial boost cost
+
         const pointsDisplay = document.getElementById('pointsDisplay');
         const tapsPerHour = 20;
         const cooldownTime = 1 * 60 * 60 * 1000; // 1 hour in milliseconds
         let tapCount = parseInt(localStorage.getItem('tapCount'), 10) || 0;
         const lastTapTime = parseInt(localStorage.getItem('lastTapTime'), 10) || Date.now();
 
+        const boostOverlay = document.getElementById('boostOverlay');
+        const boostCostDisplay = document.getElementById('boostCostDisplay');
+        const nextBoostValue = document.getElementById('nextBoostValue');
+
+        // Update display
+        pointsDisplay.textContent = `${points} TAB points`;
+        boostCostDisplay.textContent = boostCost;
+        nextBoostValue.textContent = `+${tapMultiplier + 1}`;
+
         // Check if cooldown has passed
         if (Date.now() - lastTapTime >= cooldownTime) {
             tapCount = 0; // Reset the tap count after cooldown
         }
-
-        // Display current points
-        pointsDisplay.textContent = `${points} TAB points`;
 
         function tapAction(event) {
             const now = Date.now();
@@ -189,33 +246,47 @@
                 return;
             }
 
-            // Increase points and tap count if limit hasn't been reached
-            if (tapCount < tapsPerHour || now - lastTapTime >= cooldownTime) {
-                points += 1;
-                tapCount += 1;
+            // Add points and tap count
+            points += tapMultiplier;
+            tapCount += 1;
+            localStorage.setItem('points', points);
+            localStorage.setItem('tapCount', tapCount);
+            pointsDisplay.textContent = `${points} TAB points`;
+
+            // Save the last tap time
+            if (tapCount === 1) {
+                localStorage.setItem('lastTapTime', now);
+            }
+        }
+
+        function openBoostOverlay() {
+            boostOverlay.style.display = 'flex';
+        }
+
+        function closeBoostOverlay() {
+            boostOverlay.style.display = 'none';
+        }
+
+        function applyBoost() {
+            if (points >= boostCost) {
+                points -= boostCost;
+                tapMultiplier += 1;
+                boostCost *= 2; // Double the cost for the next boost
+
+                // Save data
                 localStorage.setItem('points', points);
+                localStorage.setItem('tapMultiplier', tapMultiplier);
+                localStorage.setItem('boostCost', boostCost);
+
+                // Update display
                 pointsDisplay.textContent = `${points} TAB points`;
+                boostCostDisplay.textContent = boostCost;
+                nextBoostValue.textContent = `+${tapMultiplier + 1}`;
 
-                // If this is the first tap after cooldown, reset the tap count
-                if (tapCount === 1) {
-                    localStorage.setItem('lastTapTime', now);
-                }
-                localStorage.setItem('tapCount', tapCount);
-
-                // Create and show floating +1 effect
-                const floatingPlus = document.createElement('div');
-                floatingPlus.textContent = '+1';
-                floatingPlus.className = 'floating-plus';
-                floatingPlus.style.left = `${event.clientX - event.target.offsetLeft - 10}px`;
-                floatingPlus.style.top = `${event.clientY - event.target.offsetTop - 10}px`;
-
-                const tapCircle = document.querySelector('.tap-circle');
-                tapCircle.appendChild(floatingPlus);
-
-                // Remove the floating +1 after animation
-                setTimeout(() => {
-                    floatingPlus.remove();
-                }, 1200);
+                alert(`Boost applied! You now earn +${tapMultiplier} points per tap.`);
+                closeBoostOverlay();
+            } else {
+                alert("You don't have enough points for this boost.");
             }
         }
     </script>

@@ -84,16 +84,278 @@
             color: #73BEDD;
         }
 
-        .friend-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .invite-overlay,
+        .copy-message {
+            display: none;
+            position: fixed;
+            width: 80%;
+            max-width: 400px;
+            padding: 20px;
+            background-color: #1C1F4A;
+            border-radius: 12px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
         }
 
-        .friend-info img {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+        .invite-overlay h3 {
+            font-size: 18px;
+            color: #FFFFFF;
+        }
+
+        .invite-link-button {
+            margin-top: 15px;
+            padding: 12px 0;
+            width: 100%;
+            background-color: #73BEDD;
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .copy-message {
+            padding: 10px 20px;
+            background-color: #6274EB;
+            color: #FFFFFF;
+            font-size: 14px;
+            border-radius: 8px;
+        }
+
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: #1C1F4A;
+            width: 100%;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+        }
+
+        .bottom-nav-item {
+            color: #73BEDD;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .bottom-nav-item i {
+            font-size: 20px;
+            color: #73BEDD;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="invite-header">
+            <img src="onboard.png" alt="Invite Icon">
+            <div class="invite-title">Invite Friends</div>
+            <div class="invite-description">Earn 15 points for each referral.</div>
+        </div>
+
+        <button class="invite-button" onclick="showInviteOverlay()">Invite Friends</button>
+
+        <div class="friends-list" id="friendsList">
+            <!-- Referred friends will be listed here -->
+        </div>
+    </div>
+
+    <div class="invite-overlay" id="inviteOverlay">
+        <h3>Invite Friends</h3>
+        <button class="invite-link-button" onclick="copyInviteLink()">Copy Invite Link</button>
+        <button class="invite-link-button" onclick="shareInviteLink()">Share Invite Link</button>
+    </div>
+
+    <div class="copy-message" id="copyMessage">Copied to clipboard!</div>
+
+    <div class="bottom-nav">
+        <a href="homepage.html" class="bottom-nav-item">
+            <i class="fa fa-home"></i>
+            <div>Home</div>
+        </a>
+        <a href="taskspage.html" class="bottom-nav-item">
+            <i class="fa fa-tasks"></i>
+            <div>Tasks</div>
+        </a>
+        <a href="invites.html" class="bottom-nav-item">
+            <i class="fa fa-user-friends"></i>
+            <div>Invites</div>
+        </a>
+        <a href="wallet.html" class="bottom-nav-item">
+            <i class="fa fa-wallet"></i>
+            <div>Wallet</div>
+        </a>
+    </div>
+
+    <script>
+        function getDeviceId() {
+            let deviceId = localStorage.getItem('deviceId');
+            if (!deviceId) {
+                deviceId = 'ID' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('deviceId', deviceId);
+            }
+            return deviceId;
+        }
+
+        function showInviteOverlay() {
+            document.getElementById("inviteOverlay").style.display = "block";
+        }
+
+        function copyInviteLink() {
+            const deviceId = getDeviceId();
+            const inviteLink = `https://t.me/tab_farmbot?start=${deviceId}`;
+            navigator.clipboard.writeText(inviteLink).then(() => {
+                document.getElementById("copyMessage").style.display = "block";
+                setTimeout(() => document.getElementById("copyMessage").style.display = "none", 2000);
+            });
+        }
+
+        function shareInviteLink() {
+            const deviceId = getDeviceId();
+            const inviteLink = `https://t.me/tab_farmbot?start=${deviceId}`;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Invite to Tab Farm Bot',
+                    text: 'Join me on this app and earn rewards!',
+                    url: inviteLink
+                })
+                .then(() => console.log('Successfully shared'))
+                .catch((error) => console.error('Error sharing:', error));
+            } else {
+                alert("Sharing not supported on this browser.");
+            }
+        }
+
+        function checkReferral() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const refId = urlParams.get('start');
+            if (refId && !localStorage.getItem('referrer')) {
+                localStorage.setItem('referrer', refId);
+                addReferralPoints(refId);
+            }
+        }
+
+        function addReferralPoints(refId) {
+            const inviterPoints = localStorage.getItem(`points_${refId}`) || 0;
+            const updatedPoints = parseInt(inviterPoints) + 15;
+            localStorage.setItem(`points_${refId}`, updatedPoints);
+
+            let referredFriends = JSON.parse(localStorage.getItem(`referred_${refId}`) || "[]");
+            referredFriends.push({ name: "NewUser", points: 15 });
+            localStorage.setItem(`referred_${refId}`, JSON.stringify(referredFriends));
+        }
+
+        function loadFriends() {
+            const deviceId = getDeviceId();
+            const friends = JSON.parse(localStorage.getItem(`referred_${deviceId}`) || "[]");
+            const friendsList = document.getElementById("friendsList");
+            friendsList.innerHTML = ""; // Clear any existing content
+
+            friends.forEach(friend => {
+                const friendItem = document.createElement("div");
+                friendItem.className = "friend-item";
+                friendItem.innerHTML = `
+                    <span>${friend.name}</span>
+                    <span>+${friend.points}</span>
+                `;
+                friendsList.appendChild(friendItem);
+            });
+        }
+
+        window.onload = function() {
+            checkReferral();
+            loadFriends();
+        }
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Referral Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Your CSS styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0B0E36;
+            color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .invite-header {
+            margin-top: 20px;
+        }
+
+        .invite-header img {
+            width: 80px;
+            margin-bottom: 15px;
+        }
+
+        .invite-title {
+            font-size: 22px;
+            color: #73BEDD;
+        }
+
+        .invite-description {
+            font-size: 14px;
+            color: #73BEDD;
+            margin-top: 5px;
+        }
+
+        .invite-button {
+            margin: 20px 0;
+            padding: 12px 0;
+            background-color: #73BEDD;
+            border: none;
+            border-radius: 10px;
+            color: #000;
+            font-size: 16px;
+            font-weight: bold;
+            width: 95%;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .invite-button:hover {
+            background-color: #6274EB;
+        }
+
+        .friends-list {
+            width: 100%;
+            max-width: 480px;
+            margin-top: 10px;
+        }
+
+        .friend-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #2D2F6E;
+            color: #73BEDD;
         }
 
         .invite-overlay,
@@ -264,15 +526,13 @@
             const deviceId = getDeviceId();
             const friends = JSON.parse(localStorage.getItem(`referred_${deviceId}`) || "[]");
             const friendsList = document.getElementById("friendsList");
+            friendsList.innerHTML = ""; // Clear any existing content
 
             friends.forEach(friend => {
                 const friendItem = document.createElement("div");
                 friendItem.className = "friend-item";
                 friendItem.innerHTML = `
-                    <div class="friend-info">
-                        <img src="user-avatar.png" alt="User Avatar">
-                        <span>${friend.name}</span>
-                    </div>
+                    <span>${friend.name}</span>
                     <span>+${friend.points}</span>
                 `;
                 friendsList.appendChild(friendItem);

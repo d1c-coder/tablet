@@ -3,93 +3,551 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Wallet Page</title>
+    <title>Wallet - TAB Points</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Styles */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background-color: #0B0E36; color: #FFFFFF; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .container { width: 100%; max-width: 480px; padding: 20px; text-align: center; position: relative; }
-        .wallet-header img { width: 80px; margin-bottom: 15px; }
-        .wallet-title { font-size: 22px; color: #73BEDD; }
-        .wallet-description { font-size: 14px; color: #73BEDD; margin-top: 5px; }
-        .connect-button { padding: 12px 0; background-color: #0B0E36; border: 1px solid #73BEDD; border-radius: 10px; color: #73BEDD; font-size: 16px; font-weight: bold; cursor: pointer; width: 95%; transition: background-color 0.2s ease; }
-        .locked-wallet { background-color: #1C1F4A; display: flex; align-items: center; justify-content: center; padding: 10px 0; margin-top: 20px; font-size: 14px; color: #73BEDD; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0B0E36;
+            color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+        }
+        
+        .bg-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #73BEDD;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-100px) translateX(50px); }
+            50% { transform: translateY(-200px) translateX(-30px); }
+            75% { transform: translateY(-100px) translateX(30px); }
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 80px);
+            justify-content: center;
+        }
+        
+        .wallet-header {
+            margin-bottom: 30px;
+        }
+        
+        .wallet-title {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #73BEDD 0%, #4a9bc7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .wallet-subtitle {
+            font-size: 14px;
+            color: #8a9cc9;
+            line-height: 1.6;
+        }
+        
+        .wallet-form {
+            background: rgba(28, 31, 74, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid rgba(115, 190, 221, 0.2);
+            box-shadow: 0 8px 32px rgba(115, 190, 221, 0.1);
+        }
+        
+        .form-label {
+            font-size: 14px;
+            color: #73BEDD;
+            margin-bottom: 10px;
+            display: block;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .wallet-input {
+            width: 100%;
+            padding: 15px;
+            background: #0B0E36;
+            border: 2px solid rgba(115, 190, 221, 0.3);
+            border-radius: 15px;
+            color: #FFFFFF;
+            font-size: 14px;
+            font-family: monospace;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        
+        .wallet-input:focus {
+            border-color: #73BEDD;
+            box-shadow: 0 0 20px rgba(115, 190, 221, 0.3);
+        }
+        
+        .wallet-input::placeholder {
+            color: #5a6a8a;
+        }
+        
+        .disclaimer {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            padding: 12px;
+            border-radius: 12px;
+            margin: 15px 0;
+            text-align: left;
+        }
+        
+        .disclaimer i {
+            color: #ffc107;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .disclaimer-text {
+            font-size: 12px;
+            color: #ffc107;
+            line-height: 1.4;
+        }
+        
+        .save-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #73BEDD 0%, #4a9bc7 100%);
+            border: none;
+            border-radius: 25px;
+            color: #0B0E36;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+        
+        .save-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(115, 190, 221, 0.5);
+        }
+        
+        .save-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .saved-wallet {
+            background: rgba(76, 175, 80, 0.1);
+            border: 2px solid #4CAF50;
+            padding: 15px;
+            border-radius: 15px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .saved-wallet.active {
+            display: block;
+        }
+        
+        .saved-wallet-label {
+            font-size: 12px;
+            color: #4CAF50;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        .saved-wallet-address {
+            font-family: monospace;
+            color: #4CAF50;
+            font-size: 13px;
+            word-break: break-all;
+        }
+        
+        .change-wallet-btn {
+            width: 100%;
+            padding: 12px;
+            background: rgba(115, 190, 221, 0.1);
+            border: 2px solid #73BEDD;
+            border-radius: 20px;
+            color: #73BEDD;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .change-wallet-btn:hover {
+            background: rgba(115, 190, 221, 0.2);
+        }
+        
+        .error-message {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid #ff6b6b;
+            padding: 12px;
+            border-radius: 12px;
+            color: #ff6b6b;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .error-message.active {
+            display: block;
+        }
+        
+        .success-message {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid #4CAF50;
+            padding: 12px;
+            border-radius: 12px;
+            color: #4CAF50;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .success-message.active {
+            display: block;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(11, 14, 54, 0.3);
+            border-top: 2px solid #0B0E36;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         .bottom-nav {
             display: flex;
             justify-content: space-around;
-            background-color: #1C1F4A;
             width: 100%;
+            max-width: 480px;
+            background: rgba(28, 31, 74, 0.95);
+            backdrop-filter: blur(10px);
             padding: 10px 0;
             position: fixed;
             bottom: 0;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(115, 190, 221, 0.2);
+            z-index: 100;
         }
-        .bottom-nav-item { color: #73BEDD; text-align: center; font-size: 12px; }
-        .bottom-nav-item i { font-size: 20px; color: #73BEDD; }
+        
+        .bottom-nav-item {
+            text-align: center;
+            color: #8a9cc9;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 5px 15px;
+            border-radius: 12px;
+        }
+        
+        .bottom-nav-item:hover {
+            color: #73BEDD;
+            background: rgba(115, 190, 221, 0.1);
+        }
+        
+        .bottom-nav-item i {
+            font-size: 20px;
+            margin-bottom: 3px;
+            transition: transform 0.3s ease;
+        }
+        
+        .bottom-nav-item:hover i {
+            transform: scale(1.2);
+        }
     </style>
 </head>
 <body>
+    <div class="bg-particles">
+        <div class="particle" style="top: 10%; left: 20%; animation-delay: 0s;"></div>
+        <div class="particle" style="top: 30%; left: 80%; animation-delay: 2s;"></div>
+        <div class="particle" style="top: 50%; left: 10%; animation-delay: 4s;"></div>
+        <div class="particle" style="top: 70%; left: 70%; animation-delay: 6s;"></div>
+        <div class="particle" style="top: 90%; left: 40%; animation-delay: 8s;"></div>
+    </div>
+
     <div class="container">
         <div class="wallet-header">
-            <img src="onboard.png" alt="Wallet Icon">
-            <div class="wallet-title">Wallet</div>
+            <div class="wallet-title">Solana Wallet</div>
+            <div class="wallet-subtitle">Enter your Solana wallet address below</div>
         </div>
-        <button class="connect-button" id="connectButton" onclick="connectWallet()">Connect Wallet</button>
-        <div class="locked-wallet" id="lockedWallet" style="display: none;">
-            <span id="savedAddress"></span>
+
+        <div class="wallet-form">
+            <div id="walletInputSection">
+                <label class="form-label">Wallet Address</label>
+                <input 
+                    type="text" 
+                    id="walletInput" 
+                    class="wallet-input" 
+                    placeholder="Enter your Solana wallet address..."
+                    maxlength="44"
+                />
+                
+                <div class="disclaimer">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span class="disclaimer-text">
+                        ⚠️ Please ensure this is a valid Solana wallet address. Only Solana wallets are supported.
+                    </span>
+                </div>
+                
+                <button class="save-button" id="saveButton" onclick="saveWallet()">
+                    Save Wallet Address
+                </button>
+            </div>
+
+            <div class="saved-wallet" id="savedWalletSection">
+                <div class="saved-wallet-label">
+                    <i class="fas fa-check-circle"></i> SAVED WALLET
+                </div>
+                <div class="saved-wallet-address" id="savedWalletAddress"></div>
+                <button class="change-wallet-btn" onclick="changeWallet()">
+                    Change Wallet Address
+                </button>
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
         </div>
     </div>
+
     <div class="bottom-nav">
         <div class="bottom-nav-item" onclick="location.href='homepage.html'">
-            <i class="fa fa-home"></i>
+            <i class="fas fa-home"></i>
             <div>Home</div>
         </div>
         <div class="bottom-nav-item" onclick="location.href='taskspage.html'">
-            <i class="fa fa-tasks"></i>
+            <i class="fas fa-tasks"></i>
             <div>Tasks</div>
         </div>
         <div class="bottom-nav-item" onclick="location.href='invites.html'">
-            <i class="fa fa-user-friends"></i>
+            <i class="fas fa-user-friends"></i>
             <div>Invites</div>
         </div>
         <div class="bottom-nav-item" onclick="location.href='wallet.html'">
-            <i class="fa fa-wallet"></i>
+            <i class="fas fa-wallet"></i>
             <div>Wallet</div>
         </div>
     </div>
     
     <script>
-        function connectWallet() {
-            // Check if Phantom is installed
-            if (window.solana && window.solana.isPhantom) {
-                try {
-                    window.solana.connect({ onlyIfTrusted: true }).then(response => {
-                        const walletAddress = response.publicKey.toString();
-                        localStorage.setItem("walletAddress", walletAddress);
-                        document.getElementById("connectButton").style.display = "none";
-                        document.getElementById("lockedWallet").style.display = "block";
-                        document.getElementById("savedAddress").textContent = `Connected: ${walletAddress}`;
-                        document.getElementById("walletDescription").innerText = "Wallet connected successfully.";
-                    });
-                } catch (error) {
-                    console.error("Connection failed:", error);
+        // ===== SUPABASE CONFIGURATION =====
+        // Replace these with your Supabase project details
+        const SUPABASE_URL = 'https://smhwzhypkxxyqpcjicmk.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNtaHd6aHlwa3h4eXFwY2ppY21rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ5NDc4MDMsImV4cCI6MjA4MDUyMzgwM30.EG3fV1m80eRfC9wq_wfsmUn-oTBS6AEaw-xeywMUfFA';
+        
+        // Get user info from localStorage
+        const userNickname = localStorage.getItem('nickname');
+        const userPoints = localStorage.getItem('points') || 0;
+        
+        // ===== VALIDATION =====
+        function isValidSolanaAddress(address) {
+            // Solana addresses are 32-44 characters, base58 encoded
+            const solanaRegex = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
+            return solanaRegex.test(address);
+        }
+        
+        // ===== UI HELPERS =====
+        function showError(message) {
+            const errorEl = document.getElementById('errorMessage');
+            errorEl.textContent = message;
+            errorEl.classList.add('active');
+            setTimeout(() => errorEl.classList.remove('active'), 5000);
+        }
+        
+        function showSuccess(message) {
+            const successEl = document.getElementById('successMessage');
+            successEl.textContent = message;
+            successEl.classList.add('active');
+            setTimeout(() => successEl.classList.remove('active'), 3000);
+        }
+        
+        function showSavedState(address) {
+            document.getElementById('walletInputSection').style.display = 'none';
+            document.getElementById('savedWalletSection').classList.add('active');
+            document.getElementById('savedWalletAddress').textContent = address;
+        }
+        
+        function showInputState() {
+            document.getElementById('walletInputSection').style.display = 'block';
+            document.getElementById('savedWalletSection').classList.remove('active');
+        }
+        
+        // ===== SAVE TO SUPABASE =====
+        async function saveToSupabase(walletAddress) {
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/wallets`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify({
+                        wallet_address: walletAddress,
+                        nickname: userNickname,
+                        points: parseInt(userPoints),
+                        created_at: new Date().toISOString()
+                    })
+                });
+                
+                if (!response.ok) {
+                    // Check if wallet already exists
+                    if (response.status === 409) {
+                        // Update existing wallet
+                        const updateResponse = await fetch(
+                            `${SUPABASE_URL}/rest/v1/wallets?wallet_address=eq.${walletAddress}`,
+                            {
+                                method: 'PATCH',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'apikey': SUPABASE_ANON_KEY,
+                                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                                    'Prefer': 'return=representation'
+                                },
+                                body: JSON.stringify({
+                                    nickname: userNickname,
+                                    points: parseInt(userPoints),
+                                    updated_at: new Date().toISOString()
+                                })
+                            }
+                        );
+                        
+                        if (!updateResponse.ok) {
+                            throw new Error('Failed to update wallet');
+                        }
+                        return await updateResponse.json();
+                    }
+                    throw new Error('Failed to save wallet');
                 }
-            } else {
-                // Phantom Wallet Deep Link with Telegram callback
-                window.location.href = "phantom://app?request=connect&callback=https://t.me/tab_farmbot?start=wallet_connected";
+                
+                return await response.json();
+                
+            } catch (error) {
+                console.error('Supabase error:', error);
+                throw error;
             }
         }
-
-        // Load saved address if already connected
+        
+        // ===== SAVE WALLET =====
+        async function saveWallet() {
+            const walletInput = document.getElementById('walletInput');
+            const saveButton = document.getElementById('saveButton');
+            const walletAddress = walletInput.value.trim();
+            
+            // Validate
+            if (!walletAddress) {
+                showError('Please enter a wallet address');
+                return;
+            }
+            
+            if (!isValidSolanaAddress(walletAddress)) {
+                showError('Invalid Solana wallet address. Please check and try again.');
+                return;
+            }
+            
+            // Disable button and show loading
+            saveButton.disabled = true;
+            saveButton.innerHTML = 'Saving... <span class="loading"></span>';
+            
+            try {
+                // Save to Supabase
+                await saveToSupabase(walletAddress);
+                
+                // Save to localStorage
+                localStorage.setItem('walletAddress', walletAddress);
+                localStorage.setItem('walletSaved', 'true');
+                localStorage.setItem('walletTimestamp', Date.now());
+                
+                // Update UI
+                saveButton.disabled = false;
+                saveButton.textContent = 'Save Wallet Address';
+                showSavedState(walletAddress);
+                showSuccess('✓ Wallet saved successfully!');
+                
+            } catch (error) {
+                console.error('Save error:', error);
+                saveButton.disabled = false;
+                saveButton.textContent = 'Save Wallet Address';
+                showError('Failed to save wallet. Please try again.');
+            }
+        }
+        
+        // ===== CHANGE WALLET =====
+        function changeWallet() {
+            if (confirm('Are you sure you want to change your wallet address?')) {
+                document.getElementById('walletInput').value = '';
+                showInputState();
+            }
+        }
+        
+        // ===== LOAD SAVED WALLET =====
         window.onload = function() {
-            const savedAddress = localStorage.getItem("walletAddress");
-            if (savedAddress) {
-                document.getElementById("connectButton").style.display = "none";
-                document.getElementById("lockedWallet").style.display = "block";
-                document.getElementById("savedAddress").textContent = `Connected: ${savedAddress}`;
-                document.getElementById("walletDescription").innerText = "Your wallet address is connected.";
+            const savedAddress = localStorage.getItem('walletAddress');
+            const isSaved = localStorage.getItem('walletSaved') === 'true';
+            
+            if (savedAddress && isSaved) {
+                showSavedState(savedAddress);
+            } else {
+                showInputState();
             }
         };
+        
+        // ===== ENTER KEY SUPPORT =====
+        document.getElementById('walletInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                saveWallet();
+            }
+        });
     </script>
 </body>
 </html>

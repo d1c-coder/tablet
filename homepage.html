@@ -20,8 +20,10 @@
             justify-content: space-between;
             background: linear-gradient(135deg, #0B0E36 0%, #1a1d4a 50%, #0B0E36 100%);
             color: #FFFFFF;
-            min-height: 100vh;
-            overflow-x: hidden;
+            height: 100vh;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
         }
         
         /* Animated background particles */
@@ -55,12 +57,14 @@
         .container {
             width: 100%;
             max-width: 480px;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
             position: relative;
-            margin-top: 5px;
-            margin-bottom: 100px;
             z-index: 1;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 80px);
+            overflow: hidden;
         }
         
         .header {
@@ -68,16 +72,16 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
-            padding: 15px 20px;
+            padding: 10px 15px;
             background: rgba(28, 31, 74, 0.6);
             backdrop-filter: blur(10px);
-            border-radius: 20px;
-            margin-bottom: 20px;
+            border-radius: 15px;
+            margin-bottom: 10px;
             box-shadow: 0 8px 32px rgba(115, 190, 221, 0.1);
         }
         
         .username {
-            font-size: 22px;
+            font-size: 18px;
             font-weight: bold;
             background: linear-gradient(135deg, #73BEDD 0%, #4a9bc7 100%);
             -webkit-background-clip: text;
@@ -88,14 +92,14 @@
         .leaderboard-btn {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
+            gap: 6px;
+            padding: 8px 15px;
             border: 2px solid #73BEDD;
-            border-radius: 25px;
+            border-radius: 20px;
             color: #73BEDD;
             font-weight: bold;
             text-transform: uppercase;
-            font-size: 12px;
+            font-size: 10px;
             background: rgba(115, 190, 221, 0.1);
             cursor: pointer;
             transition: all 0.3s ease;
@@ -112,7 +116,7 @@
         .stats-container {
             display: flex;
             justify-content: space-around;
-            margin: 20px 0;
+            margin: 10px 0;
             gap: 10px;
         }
         
@@ -120,19 +124,19 @@
             flex: 1;
             background: rgba(28, 31, 74, 0.6);
             backdrop-filter: blur(10px);
-            padding: 15px;
-            border-radius: 15px;
+            padding: 10px;
+            border-radius: 12px;
             border: 1px solid rgba(115, 190, 221, 0.2);
         }
         
         .stat-label {
-            font-size: 11px;
+            font-size: 10px;
             color: #8a9cc9;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
         
         .stat-value {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             color: #73BEDD;
         }
@@ -141,9 +145,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 40px auto;
-            width: 280px;
-            height: 280px;
+            margin: 15px auto;
+            width: 220px;
+            height: 220px;
             border-radius: 50%;
             background: linear-gradient(135deg, #1C1F4A 0%, #2a2f6b 100%);
             cursor: pointer;
@@ -154,6 +158,7 @@
             transition: all 0.2s ease;
             border: 3px solid transparent;
             background-clip: padding-box;
+            flex-shrink: 0;
         }
         
         .tap-circle::before {
@@ -194,14 +199,14 @@
         }
         
         .tap-logo {
-            width: 140px;
-            height: 140px;
+            width: 110px;
+            height: 110px;
             background: linear-gradient(135deg, #73BEDD 0%, #4a9bc7 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 60px;
+            font-size: 50px;
             box-shadow: 0 10px 30px rgba(115, 190, 221, 0.4);
             transition: transform 0.2s ease;
         }
@@ -226,13 +231,13 @@
         }
         
         .points {
-            font-size: 48px;
+            font-size: 36px;
             font-weight: bold;
             background: linear-gradient(135deg, #73BEDD 0%, #4a9bc7 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin: 30px 0;
+            margin: 15px 0;
             text-shadow: 0 0 30px rgba(115, 190, 221, 0.5);
         }
         
@@ -258,9 +263,9 @@
         }
         
         .boost-btn {
-            padding: 12px 24px;
+            padding: 10px 20px;
             border: 2px solid #73BEDD;
-            border-radius: 25px;
+            border-radius: 20px;
             color: #73BEDD;
             background: rgba(115, 190, 221, 0.1);
             font-weight: bold;
@@ -268,8 +273,9 @@
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 20px;
+            gap: 6px;
+            margin-bottom: 10px;
+            font-size: 13px;
         }
         
         .boost-btn:hover {
@@ -281,15 +287,15 @@
         
         .cooldown-timer {
             text-align: center;
-            margin-top: 20px;
-            padding: 15px;
+            margin-top: 10px;
+            padding: 10px;
             background: rgba(255, 107, 107, 0.1);
-            border-radius: 15px;
+            border-radius: 12px;
             border: 1px solid rgba(255, 107, 107, 0.3);
         }
         
         .cooldown-timer span {
-            font-size: 16px;
+            font-size: 14px;
             color: #ff6b6b;
             font-weight: bold;
         }
@@ -301,7 +307,7 @@
             max-width: 480px;
             background: rgba(28, 31, 74, 0.95);
             backdrop-filter: blur(10px);
-            padding: 15px 0;
+            padding: 10px 0;
             position: fixed;
             bottom: 0;
             box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
@@ -325,8 +331,8 @@
         }
         
         .nav-item i {
-            font-size: 24px;
-            margin-bottom: 4px;
+            font-size: 20px;
+            margin-bottom: 3px;
             transition: transform 0.3s ease;
         }
         
